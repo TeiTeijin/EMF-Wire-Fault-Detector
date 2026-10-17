@@ -1,0 +1,7 @@
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# (The Android project under frontend/EMFReader/ carries its own
+#  .gitignore files, and the Arduino sketches have no build output.)

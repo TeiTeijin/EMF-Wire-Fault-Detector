@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EMFReader</string>
+    <string name="app_title">EMF-SENSE</string>
+
+    <string name="access_required_title">Bluetooth Access Required</string>
+    <string name="access_required_body">EMF-Sense connects to your sensor over Bluetooth. No readings are stored or sent anywhere.</string>
+    <string name="access_required_cta">Allow Bluetooth Access</string>
+    <string name="permission_denied_title">Permission Denied</string>
+    <string name="permission_denied_body">Bluetooth permission is required before EMF-Sense can reach your sensor.</string>
+    <string name="permission_denied_cta_settings">Open Settings</string>
+    <string name="permission_denied_cta_retry">Try Again</string>
+    <string name="permission_denied_hint">You can allow Nearby devices at any time in Settings.</string>
+    <string name="permission_denied_hint_blocked">Android has blocked further requests. Allow Nearby devices in Settings to continue.</string>
+
+    <string name="scan_loading">Looking for paired sensors…</string>
+    <string name="scan_found_title">Paired Devices</string>
+    <string name="scan_cta_connect">Connect</string>
+    <string name="scan_cta_again">Refresh</string>
+    <plurals name="scan_found_count">
+        <item quantity="one">%1$d sensor found</item>
+        <item quantity="other">%1$d sensors found</item>
+    </plurals>
+    <string name="scan_notfound_title">No Paired Sensor</string>
+    <string name="scan_notfound_body">Pair %1$s in your phone\'s Bluetooth settings, then tap Refresh.</string>
+
+    <string name="session_connecting">Connecting to %1$s…</string>
+    <string name="reconnect_banner">Link lost. Reconnecting in %1$ds.</string>
+
+    <string name="live_status_clear">Clear</string>
+    <string name="live_status_wire">Wire Detected</string>
+    <string name="live_status_fault">POSSIBLE FAULT</string>
+    <string name="live_channel_field">Field</string>
+    <string name="live_channel_opamp">Op-Amp</string>
+    <string name="live_channel_jitter">Jitter</string>
+    <string name="live_caption_clear">clear &lt; 15%</string>
+    <string name="live_caption_fault">fault ≥ 50%</string>
+    <string name="live_cta_disconnect">Disconnect</string>
+    <string name="live_trace_peak">Peak</string>
+    <string name="live_trace_window">Last %1$ds</string>
+    <string name="live_cta_mute_on">Mute alert buzz</string>
+    <string name="live_cta_unmute_on">Unmute alert buzz</string>
+
+    <string name="connect_failed_title">Connection Failed</string>
+    <string name="connect_cta_retry">Try Again</string>
+    <string name="connect_cta_back">Back</string>
+    <string name="connect_reason_refused">%1$s refused the connection. Power-cycle the ESP32 and try again.</string>
+    <string name="connect_reason_busy">%1$s did not accept the connection. Make sure another app is not connected.</string>
+    <string name="connect_reason_out_of_range">Lost connection to %1$s. Move closer to the sensor and try again.</string>
+    <string name="connect_reason_disappeared">%1$s went out of range before the connection completed. Move closer and try again.</string>
+    <string name="connect_reason_silent">Connected to %1$s but it sent no readings. Check the Arduino is powered and its TX wire reaches the ESP32.</string>
+</resources>
