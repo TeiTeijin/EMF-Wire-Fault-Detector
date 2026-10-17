@@ -33,16 +33,11 @@ val SessionConnectingSpinnerSize = 24.dp
 val SessionConnectingGap = 12.dp
 
 sealed interface SessionPhase {
-    /** Socket open or opening; no line has arrived yet. */
     data object Connecting : SessionPhase
     data object Live : SessionPhase
     data class Reconnecting(val secondsRemaining: Int) : SessionPhase
 }
 
-/**
- * Renders whichever session phase is current. The state itself lives in
- * [EmfSessionViewModel] so it outlives a configuration change.
- */
 @Composable
 fun EmfSessionHost(
     device: EmfDevice,
@@ -98,12 +93,6 @@ fun EmfSessionHost(
     }
 }
 
-/**
- * Shown between opening the socket and the first line arriving.
- *
- * There is no calibration countdown any more: the sketch starts streaming the
- * moment it boots, so the only thing left to wait for is the link itself.
- */
 @Composable
 private fun EmfConnectingScreen(
     deviceName: String,

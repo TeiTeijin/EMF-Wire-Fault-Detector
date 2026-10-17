@@ -51,10 +51,6 @@ fun EmfPrimaryButton(
     }
 }
 
-/**
- * Inline variant for use inside a row. Not full width, so it must never be
- * handed `fillMaxWidth` the way [EmfPrimaryButton] expects.
- */
 @Composable
 fun EmfCompactButton(
     text: String,

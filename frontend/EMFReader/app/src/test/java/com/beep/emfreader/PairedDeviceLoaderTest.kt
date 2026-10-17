@@ -6,12 +6,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.UUID
 
-/**
- * Which bonded devices the app offers to connect to.
- *
- * The bond table is full of headsets, TVs and speakers, and every one of those
- * would only fail at connect time, so the filter is worth pinning down.
- */
 class PairedDeviceLoaderTest {
 
     private val spp = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
@@ -30,8 +24,6 @@ class PairedDeviceLoaderTest {
 
     @Test
     fun acceptsTheRelayEvenIfItsUuidIsNotRecorded() {
-        // Bonding records can omit the SPP uuid on some stacks; the name is
-        // the fallback so the known board is never hidden.
         assertTrue(PairedDeviceLoader.isSensor("EMF_Wire_Detector", null))
     }
 

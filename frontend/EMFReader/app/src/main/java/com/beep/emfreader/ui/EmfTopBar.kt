@@ -26,10 +26,6 @@ val EmfTopBarHeight = 44.dp
 val EmfNavLineHeight = 2.dp
 val EmfNavLineColor = EmfTextFaint.copy(alpha = 0.12f)
 
-/**
- * Hairline under the nav bar, shared so every screen carries the same line.
- * The scan screen fills this same line with scan progress.
- */
 @Composable
 fun EmfNavDivider(modifier: Modifier = Modifier) {
     Box(

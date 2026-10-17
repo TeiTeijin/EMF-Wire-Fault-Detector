@@ -26,17 +26,10 @@ data class SessionUiState(
     val peak: Int = 0,
     val muted: Boolean = false,
     val reconnectSeconds: Int? = null,
-    /** Set when the link could not be opened, so the host can explain why. */
     val failure: ConnectFailure? = null,
-    /** Set once the session is over, so the host can navigate back. */
     val finished: Boolean = false
 )
 
-/**
- * Owns the live link for as long as the Activity's configuration survives.
- * Keeping the session here is what stops a rotation from dropping the RFCOMM
- * socket and losing the running feed.
- */
 class EmfSessionViewModel(application: Application) : AndroidViewModel(application) {
 
     private val history = ReadingHistory()
@@ -59,8 +52,6 @@ class EmfSessionViewModel(application: Application) : AndroidViewModel(applicati
 
             newSession.events().collect { event ->
                 when (event) {
-                    // The socket is open but the sketch may still be mute, so
-                    // the screen stays on "connecting" until a line lands.
                     SessionEvent.Connected -> Unit
 
                     is SessionEvent.Reading -> {
@@ -96,8 +87,6 @@ class EmfSessionViewModel(application: Application) : AndroidViewModel(applicati
                     )
                     delay(1_000)
                 }
-                // Release the link so a later start() is not treated as a
-                // duplicate of the session that just ended.
                 collectJob = null
                 session?.close()
                 session = null
@@ -123,7 +112,6 @@ class EmfSessionViewModel(application: Application) : AndroidViewModel(applicati
         super.onCleared()
     }
 
-    /** Fires on the transition into a fault, not on every reading that stays there. */
     private fun buzzOnEnteringFault(alert: EmfAlertLevel) {
         if (uiState.muted) return
         if (alert == EmfAlertLevel.FAULT && uiState.readings.alertLevel != EmfAlertLevel.FAULT) {

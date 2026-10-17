@@ -15,15 +15,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/**
- * Proves the display half of the pipeline: lines in the shape the sketch
- * emits, decoded by the real parser, rendered by the real live screen.
- *
- * The radio link is not covered here and cannot be without a paired sensor.
- * This catches the failure that matters once hardware is connected - a line
- * that decodes but renders as the wrong number, or a verdict that disagrees
- * with the value shown beside it.
- */
 @RunWith(AndroidJUnit4::class)
 class EmfReadingsRenderTest {
 
@@ -32,7 +23,6 @@ class EmfReadingsRenderTest {
 
     private val device = EmfDevice(EmfSppContract.RELAY_NAME, "20:50:0D:2A:61:B2")
 
-    /** Parsed once per test, so each line is decoded exactly once. */
     private fun readingsFrom(line: String) =
         requireNotNull(EmfSppContract.parseLine(line))
 
@@ -45,8 +35,6 @@ class EmfReadingsRenderTest {
                 EmfLiveScreen(
                     device = device,
                     readings = readings,
-                    // No trace here: a peak equal to one of the channels would
-                    // put the same number on screen twice.
                     onDisconnect = {}
                 )
             }
@@ -106,7 +94,6 @@ class EmfReadingsRenderTest {
 
     @Test
     fun peakTracksTheStrongestReadingInTheWindow() {
-        // The same accumulation the ViewModel performs, fed real lines.
         val history = ReadingHistory()
         listOf(
             readingsFrom("WIRE,12,10,12,8"),

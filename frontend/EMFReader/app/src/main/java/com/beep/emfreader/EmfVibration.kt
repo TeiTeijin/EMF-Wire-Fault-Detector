@@ -7,10 +7,6 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 
-/**
- * A short buzz to pair with the sensor's own buzzer. Silent when the phone is
- * silenced, and never repeats while a fault is already showing.
- */
 object EmfVibration {
 
     private const val FAULT_BUZZ_MILLIS = 400L
@@ -44,7 +40,6 @@ object EmfVibration {
         }
     }
 
-    /** Stays quiet in silent mode. Vibrate-only still buzzes, since that is the point. */
     private fun isSilenced(context: Context): Boolean {
         val audio = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager ?: return false
         return audio.ringerMode == AudioManager.RINGER_MODE_SILENT

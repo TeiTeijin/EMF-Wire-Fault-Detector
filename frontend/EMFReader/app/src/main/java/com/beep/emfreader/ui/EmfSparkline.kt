@@ -24,11 +24,6 @@ val SparklineStroke = 1.5.dp
 val SparklinePeakRadius = 3.dp
 val SparklineFillTopAlpha = 0.10f
 
-/**
- * Recent levels of one reading, oldest at the left. The point of the trace is
- * the shape: a steady wire draws a flat-ish line, arcing load draws a spike, so
- * a fault is visible as motion rather than only as a colour change.
- */
 @Composable
 fun EmfSparkline(
     values: List<Int>,

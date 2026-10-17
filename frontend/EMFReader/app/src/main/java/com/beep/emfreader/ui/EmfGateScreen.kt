@@ -59,8 +59,6 @@ fun EmfGateScreen(
         EmfTopBar()
         EmfNavDivider()
 
-        // One-shot entrance only. Nothing here is "in progress", so a looping
-        // animation would just compete with the call to action.
         val entrance = remember { Animatable(0f) }
         LaunchedEffect(Unit) {
             entrance.animateTo(1f, tween(GateEntranceMillis, easing = FastOutSlowInEasing))

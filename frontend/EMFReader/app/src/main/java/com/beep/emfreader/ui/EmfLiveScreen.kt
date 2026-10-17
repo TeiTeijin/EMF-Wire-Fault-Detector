@@ -73,11 +73,6 @@ val LiveTraceSparkGap = 6.dp
 
 private val ReconnectBannerShape = RoundedCornerShape(8.dp)
 
-/**
- * Cell boundary for each threshold. `LOW_THRESHOLD` of 15% lands between cell
- * one and two, and `FAULT_THRESHOLD` of 50% lands between cell four and five,
- * so the notch marks the crossing rather than the threshold cell itself.
- */
 private const val CLEAR_TICK_AFTER = 1
 private const val FAULT_TICK_AFTER = 4
 
@@ -123,8 +118,6 @@ fun EmfLiveScreen(
             ReconnectBanner(reconnectSeconds)
         }
 
-        // A scrolling Column defaults to Start alignment, which would left-align
-        // the fixed-width cards and the trace. Re-state the centring explicitly.
         Column(
             modifier = Modifier
                 .weight(1f)

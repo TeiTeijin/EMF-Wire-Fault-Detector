@@ -62,11 +62,9 @@ private const val STATE_FADE_IN_MILLIS = 220
 private const val STATE_FADE_OUT_MILLIS = 150
 
 sealed interface ScanUiState {
-    /** Reading the adapter's bond table. Brief, but it is a platform call. */
     data object Loading : ScanUiState
     data class Found(val devices: List<EmfDevice>) : ScanUiState
 
-    /** Nothing paired that this app can talk to. */
     data object NotFound : ScanUiState
 }
 
@@ -155,8 +153,6 @@ private fun ScanFoundBlock(
     devices: List<EmfDevice>,
     onDeviceSelected: (EmfDevice) -> Unit
 ) {
-    // Fills the available height so the content lands at the top. The other
-    // states keep their intrinsic height and stay vertically centred.
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.Start
@@ -232,13 +228,6 @@ private fun ScanGap() {
     Spacer(Modifier.height(ScanTextGap))
 }
 
-/**
- * Reads the paired-device list and hands the chosen sensor on.
- *
- * There is no scan here to time out and nothing to count down: the bond table
- * is already populated by the system, so this resolves as fast as the platform
- * answers. [loader] is injectable so previews and tests can substitute it.
- */
 @Composable
 fun EmfScanHost(
     onDeviceSelected: (EmfDevice) -> Unit,

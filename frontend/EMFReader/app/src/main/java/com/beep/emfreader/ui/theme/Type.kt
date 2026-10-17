@@ -14,7 +14,6 @@ val InterFamily = FontFamily(
     Font(R.font.inter_bold, FontWeight.Bold)
 )
 
-/** Numeric readouts, so digits keep a fixed width while values change. */
 val RobotoMonoFamily = FontFamily(
     Font(R.font.roboto_mono_regular, FontWeight.Normal),
     Font(R.font.roboto_mono_bold, FontWeight.Bold)

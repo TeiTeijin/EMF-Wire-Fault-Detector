@@ -51,7 +51,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Re-evaluates permissions after the user returns from system Settings.
         resumeTick++
     }
 }
@@ -63,8 +62,6 @@ private fun EmfAppRoot(resumeTick: Int) {
     val permissions = requiredBluetoothPermissions()
     val prefs = remember { context.getSharedPreferences(GATE_PREFS, Context.MODE_PRIVATE) }
 
-    // Persisted so the denied screen survives the process being killed while
-    // the user is away in system Settings.
     var hasRequested by remember {
         mutableStateOf(prefs.getBoolean(KEY_HAS_REQUESTED, false))
     }
@@ -92,8 +89,6 @@ private fun EmfAppRoot(resumeTick: Int) {
             activity.shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH_CONNECT)
     }
 
-    // Survives rotation, so turning the phone does not drop an active session
-    // back to the device list.
     val deviceSaver = remember {
         listSaver<EmfDevice?, String>(
             save = { device -> device?.let { listOf(it.name, it.address) } ?: emptyList() },
@@ -117,8 +112,6 @@ private fun EmfAppRoot(resumeTick: Int) {
                     onSessionLost = backToScan
                 )
             } else {
-                // The bond table changes while the user is away pairing in
-                // system Settings, so the list reloads on every resume.
                 EmfScanHost(onDeviceSelected = { device = it })
             }
         }
