@@ -74,8 +74,10 @@ EMF-Wire-Fault-Detector/
 │       └── app/src/androidTest/              # UI tests
 ├── docs/                                     # project documentation
 │   ├── api-specification.md
+│   ├── data-schema.md
 │   ├── validation-report.md
 │   ├── adr/                                  # architecture decision records
+│   ├── erd.svg / .png                        # entity-relationship diagram
 │   ├── flowchart.svg / .png                  # system flowchart
 │   └── flowchart-firmware.svg / .png         # firmware logic flowchart
 └── README.md
@@ -88,6 +90,7 @@ All formal project documents live in [`docs/`](docs/):
 | Document | What it covers |
 |---|---|
 | [API specification](docs/api-specification.md) | The integration interface: Bluetooth SPP service, authentication (fixed PIN 1234), message formats, timing limits, failure taxonomy, firmware compatibility |
+| [Data schema](docs/data-schema.md) + [ERD](docs/erd.svg) ([PNG](docs/erd.png)) | Data dictionary and Chen-notation entity-relationship diagram: readings, sessions, devices, alert levels and the EEPROM calibration layout — each mapped to the store it really lives in |
 | [Architecture Decision Records](docs/adr/) | Five ADRs: why Bluetooth Classic SPP, the two-board edge design, self-calibrating thresholds, the magnetometer handheld approach, and the monorepo |
 | [Validation report](docs/validation-report.md) | Test plan with fillable result tables: performance, interoperability, reliability, and low-voltage fault-injection tests |
 | [System flowchart](docs/flowchart.svg) ([PNG](docs/flowchart.png)) | End-to-end flow: power-on → calibration → sensing → classification → relay → phone |

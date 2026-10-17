@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1830 1020" width="1830" height="1020" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1830" height="1020" fill="#FFFFFF"/>
+<path d="M 250 470 L 320 470" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 490 466.0 L 550 466.0" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 490 474.0 L 550 474.0" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 760 466.0 L 815 466.0" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 760 474.0 L 815 474.0" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 995 470 L 1055 470" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1151.0 510 L 1151.0 590" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1159.0 510 L 1159.0 590" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1155 700 L 1155 787" fill="none" stroke="#2A7B7B" stroke-width="1.6" stroke-dasharray="7 5"/>
+<path d="M 1255 825 L 1277 825" fill="none" stroke="#2A7B7B" stroke-width="1.6" stroke-dasharray="7 5"/>
+<path d="M 1452 821.0 L 1488 821.0" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1452 829.0 L 1488 829.0" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 150 432 L 150 328" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 150 508 L 150 560 L 70 560 L 70 592" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 150 508 L 150 545 L 230 545 L 230 592" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 655 428 L 655 318" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 655 428 L 655 390 L 545 390 L 545 376" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 655 390 L 765 390 L 765 376" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 655 512 L 655 550 L 545 550 L 545 572" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 655 550 L 765 550 L 765 572" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1155 430 L 1155 313" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1155 430 L 1155 398 L 1005 398 L 1005 376" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1155 398 L 1305 398 L 1305 376" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1155 510 L 1155 568 L 990 568 L 990 612" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1155 568 L 1320 568 L 1320 612" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1055 825 L 1020 825" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1155 863 L 1155 917" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1595 783 L 1595 718" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1595 867 L 1595 895 L 1450 895 L 1450 917" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1595 867 L 1595 917" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<path d="M 1595 895 L 1740 895 L 1740 917" fill="none" stroke="#2A7B7B" stroke-width="1.6"/>
+<rect x="50.0" y="432.0" width="200" height="76" rx="2" ry="2" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="150" y="462" font-size="13.5" text-anchor="middle" fill="#17403F">ALERT_LEVEL</text><text x="150" y="483" font-size="9.5" text-anchor="middle" font-style="italic" fill="#3D6F6F">lookup (firmware + app)</text>
+<rect x="550.0" y="428.0" width="210" height="84" rx="2" ry="2" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><rect x="555.0" y="433.0" width="200" height="74" rx="2" ry="2" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="655" y="462" font-size="13.5" text-anchor="middle" fill="#17403F">READING</text><text x="655" y="483" font-size="9.5" text-anchor="middle" font-style="italic" fill="#3D6F6F">wire record · 15-s history</text>
+<rect x="1055.0" y="430.0" width="200" height="80" rx="2" ry="2" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="1155" y="462" font-size="13.5" text-anchor="middle" fill="#17403F">SESSION</text><text x="1155" y="483" font-size="9.5" text-anchor="middle" font-style="italic" fill="#3D6F6F">app RAM (ViewModel)</text>
+<rect x="1055.0" y="787.0" width="200" height="76" rx="2" ry="2" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="1155" y="817" font-size="13.5" text-anchor="middle" fill="#17403F">DEVICE</text><text x="1155" y="838" font-size="9.5" text-anchor="middle" font-style="italic" fill="#3D6F6F">OS bond table · app list</text>
+<rect x="1487.5" y="783.0" width="215" height="84" rx="2" ry="2" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><rect x="1492.5" y="788.0" width="205" height="74" rx="2" ry="2" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="1595" y="817" font-size="13.5" text-anchor="middle" fill="#17403F">CALIBRATION</text><text x="1595" y="838" font-size="9.5" text-anchor="middle" font-style="italic" fill="#3D6F6F">EEPROM bytes 0–6</text>
+<polygon points="405,412.0 490.0,470 405,528.0 320.0,470" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="405" y="474.5" font-size="12" text-anchor="middle" fill="#17403F">classifies</text>
+<polygon points="905,408.0 995.0,470 905,532.0 815.0,470" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><polygon points="905,414.0 989.0,470 905,526.0 821.0,470" fill="none" stroke="#2A7B7B" stroke-width="1.7"/><text x="905" y="474.5" font-size="12" text-anchor="middle" fill="#17403F">captures</text>
+<polygon points="1155,590.0 1240.0,645 1155,700.0 1070.0,645" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="1155" y="649.5" font-size="12" text-anchor="middle" fill="#17403F">binds</text>
+<polygon points="1365,766.0 1452.5,825 1365,884.0 1277.5,825" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><polygon points="1365,772.0 1446.5,825 1365,878.0 1283.5,825" fill="none" stroke="#2A7B7B" stroke-width="1.7"/><text x="1365" y="829.5" font-size="12" text-anchor="middle" fill="#17403F">saves</text>
+<ellipse cx="150" cy="300" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="150" y="304.5" font-size="12" text-anchor="middle" fill="#17403F">code</text><line x1="133" y1="310" x2="167" y2="310" stroke="#17403F" stroke-width="1.1"/>
+<ellipse cx="70" cy="620" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="70" y="624.5" font-size="12" text-anchor="middle" fill="#17403F">label</text>
+<ellipse cx="230" cy="620" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="230" y="624.5" font-size="12" text-anchor="middle" fill="#17403F">rule</text>
+<ellipse cx="655" cy="290" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="655" y="294.5" font-size="12" text-anchor="middle" fill="#17403F">sequence</text><line x1="626" y1="300" x2="684" y2="300" stroke="#17403F" stroke-width="1.1" stroke-dasharray="6 4"/>
+<ellipse cx="545" cy="348" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="545" y="352.5" font-size="12" text-anchor="middle" fill="#17403F">signal_pct</text>
+<ellipse cx="765" cy="348" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="765" y="352.5" font-size="12" text-anchor="middle" fill="#17403F">field_pct</text>
+<ellipse cx="545" cy="600" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="545" y="604.5" font-size="12" text-anchor="middle" fill="#17403F">opamp_pct</text>
+<ellipse cx="765" cy="600" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="765" y="604.5" font-size="12" text-anchor="middle" fill="#17403F">jitter_pct</text>
+<ellipse cx="1155" cy="285" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="1155" y="289.5" font-size="12" text-anchor="middle" fill="#17403F">session_id</text><line x1="1120" y1="294" x2="1190" y2="294" stroke="#17403F" stroke-width="1.1"/>
+<ellipse cx="1005" cy="348" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="1005" y="352.5" font-size="12" text-anchor="middle" fill="#17403F">phase</text>
+<ellipse cx="1305" cy="348" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="1305" y="352.5" font-size="12" text-anchor="middle" fill="#17403F">muted</text>
+<ellipse cx="990" cy="640" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><ellipse cx="990" cy="640" rx="70.0" ry="23.0" fill="none" stroke="#2A7B7B" stroke-width="1.7"/><text x="990" y="644.5" font-size="12" text-anchor="middle" fill="#17403F">trace [30]</text>
+<ellipse cx="1320" cy="640" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7" stroke-dasharray="7 5"/><text x="1320" y="644.5" font-size="12" text-anchor="middle" fill="#17403F">peak</text>
+<ellipse cx="945" cy="825" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="945" y="829.5" font-size="12" text-anchor="middle" fill="#17403F">address</text><line x1="919" y1="834" x2="971" y2="834" stroke="#17403F" stroke-width="1.1"/>
+<ellipse cx="1155" cy="945" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="1155" y="949.5" font-size="12" text-anchor="middle" fill="#17403F">name</text>
+<ellipse cx="1595" cy="690" rx="75.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="1595" y="694.5" font-size="12" text-anchor="middle" fill="#17403F">marker</text>
+<ellipse cx="1450" cy="945" rx="70.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="1450" y="949.5" font-size="12" text-anchor="middle" fill="#17403F">off_x</text>
+<ellipse cx="1595" cy="945" rx="70.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="1595" y="949.5" font-size="12" text-anchor="middle" fill="#17403F">off_y</text>
+<ellipse cx="1740" cy="945" rx="70.0" ry="28.0" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.7"/><text x="1740" y="949.5" font-size="12" text-anchor="middle" fill="#17403F">off_z</text>
+<rect x="30" y="30" width="360" height="210" rx="4" ry="4" fill="none" stroke="#2A7B7B" stroke-width="1.2"/>
+<ellipse cx="77" cy="158" rx="28" ry="13" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.4"/><ellipse cx="77" cy="158" rx="23" ry="8" fill="none" stroke="#2A7B7B" stroke-width="1.4"/>
+<ellipse cx="77" cy="188" rx="28" ry="13" fill="#D9EFEF" stroke="#2A7B7B" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="915" y="48" font-size="15.5" text-anchor="middle" font-weight="bold" fill="#17403F">EMF Wire Fault Detector — Entity-Relationship Diagram (Chen notation)</text>
+<text x="210.0" y="54" font-size="12" text-anchor="middle" font-weight="bold" fill="#17403F">Notation</text>
+<line x1="55" y1="74" x2="100" y2="74" stroke="#2A7B7B" stroke-width="1.6"/><line x1="55" y1="82" x2="100" y2="82" stroke="#2A7B7B" stroke-width="1.6"/>
+<text x="112" y="82" font-size="11" text-anchor="start" fill="#17403F">total participation</text>
+<line x1="55" y1="104" x2="100" y2="104" stroke="#2A7B7B" stroke-width="1.6"/>
+<text x="112" y="108" font-size="11" text-anchor="start" fill="#17403F">partial participation</text>
+<line x1="55" y1="130" x2="100" y2="130" stroke="#2A7B7B" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="112" y="134" font-size="11" text-anchor="start" fill="#17403F">optional relationship</text>
+<text x="112" y="162" font-size="11" text-anchor="start" fill="#17403F">multi-valued attribute</text>
+<text x="112" y="192" font-size="11" text-anchor="start" fill="#17403F">derived attribute</text>
+<text x="112" y="220" font-size="10" text-anchor="start" fill="#3D6F6F">underlined = key · dashed underline = partial key</text>
+</svg>
