@@ -72,8 +72,28 @@ EMF-Wire-Fault-Detector/
 │       ├── app/src/main/                     # Kotlin + Compose sources
 │       ├── app/src/test/                     # unit tests
 │       └── app/src/androidTest/              # UI tests
+├── docs/                                     # project documentation
+│   ├── api-specification.md
+│   ├── validation-report.md
+│   ├── adr/                                  # architecture decision records
+│   ├── flowchart.svg / .png                  # system flowchart
+│   └── flowchart-firmware.svg / .png         # firmware logic flowchart
 └── README.md
 ```
+
+## Project documentation
+
+All formal project documents live in [`docs/`](docs/):
+
+| Document | What it covers |
+|---|---|
+| [API specification](docs/api-specification.md) | The integration interface: Bluetooth SPP service, authentication (fixed PIN 1234), message formats, timing limits, failure taxonomy, firmware compatibility |
+| [Architecture Decision Records](docs/adr/) | Five ADRs: why Bluetooth Classic SPP, the two-board edge design, self-calibrating thresholds, the magnetometer handheld approach, and the monorepo |
+| [Validation report](docs/validation-report.md) | Test plan with fillable result tables: performance, interoperability, reliability, and low-voltage fault-injection tests |
+| [System flowchart](docs/flowchart.svg) ([PNG](docs/flowchart.png)) | End-to-end flow: power-on → calibration → sensing → classification → relay → phone |
+| [Firmware flowchart](docs/flowchart-firmware.svg) ([PNG](docs/flowchart-firmware.png)) | How one sensing cycle processes the signals and decides Clear / Wire / Fault |
+
+<img src="docs/flowchart.svg" width="440" alt="System flowchart">
 
 ## Hardware and wiring
 
@@ -110,7 +130,9 @@ STATUS,signal,fieldPct,opampPct,jitterPct
 e.g. `WIRE,44,0,44,20` — status word (`CLEAR` / `WIRE` / `FAULT`), headline
 signal, magnetometer channel, op-amp channel, jitter. All percentages are
 0–100. The app also understands the verbose debug lines of earlier sketch
-versions, so older hardware keeps working.
+versions, so older hardware keeps working. Full details — service UUID,
+authentication, timing limits, failure taxonomy — are in the
+[API specification](docs/api-specification.md).
 
 ## Getting started
 

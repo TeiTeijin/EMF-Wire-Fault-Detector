@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 1810" width="980" height="1810" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="980" height="1810" fill="#FFFFFF"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1F3864"/></marker></defs>
+<path d="M 480 64 L 480 110.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 160.0 L 480 206.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 256.0 L 480 302.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 366.0 L 480 412.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 462.0 L 480 507.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 630 562.0 L 640 562.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 617.0 L 480 652.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 790 594.0 L 790 627.0 L 510 627.0 L 510 652.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 685.0 L 480 725.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 789.0 L 480 835.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 899.0 L 480 945.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1009.0 L 480 1055.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1119.0 L 480 1164.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 330 1219.0 L 280 1219.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1274.0 L 480 1319.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 630 1374.0 L 660 1374.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1429.0 L 480 1474.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1522.0 L 480 1577.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 160 1243.0 L 160 1539.0 L 450 1539.0 L 450 1577.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 790 1398.0 L 790 1551.0 L 510 1551.0 L 510 1577.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1610.0 L 480 1650.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1700.0 L 480 1746.0" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1800.0 L 480 1828.0 L 30 1828.0 L 30 135.0 L 210 135.0" fill="none" stroke="#1F3864" stroke-width="1.6" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<rect x="320.0" y="16.0" width="320" height="48" rx="24.0" ry="24.0" fill="#1F3864" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="44.5" font-size="13" text-anchor="middle" font-weight="bold" fill="#FFFFFF">Each pass of the sensing loop</text>
+<rect x="210.0" y="110.0" width="540" height="50" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="139.6" font-size="13" text-anchor="middle" fill="#1F3864">Measure antenna: peak-to-peak on A0 over 40 ms</text>
+<rect x="210.0" y="206.0" width="540" height="50" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="235.6" font-size="13" text-anchor="middle" fill="#1F3864">Rolling average (10 samples): level and jump</text>
+<rect x="180.0" y="302.0" width="600" height="64" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="330.1" font-size="13" text-anchor="middle" fill="#1F3864">antennaSignal = avg − calibrated ceiling (0 if less)</text><text x="480" y="347.1" font-size="13" text-anchor="middle" fill="#1F3864">antennaJitter = avg jump − calibrated jitter (0 if less)</text>
+<rect x="210.0" y="412.0" width="540" height="50" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="441.6" font-size="13" text-anchor="middle" fill="#1F3864">Read QMC5883P X, Y, Z over I2C (0x2C)</text>
+<polygon points="480,507.0 630,562.0 480,617.0 330,562.0" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="566.4" font-size="12.5" text-anchor="middle" fill="#1F3864">Read OK?</text>
+<rect x="640.0" y="530.0" width="300" height="64" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="790" y="558.0" font-size="13" text-anchor="middle" fill="#1F3864">Keep last good values;</text><text x="790" y="575.0" font-size="13" text-anchor="middle" fill="#1F3864">restart chip after 3 fails</text>
+<polygon points="420,652.0 540,652.0 480,685.0" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/>
+<rect x="180.0" y="725.0" width="600" height="64" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="753.0" font-size="13" text-anchor="middle" fill="#1F3864">field = |XYZ - offsets|; delta = |field - zero point|</text><text x="480" y="770.0" font-size="13" text-anchor="middle" fill="#1F3864">fieldJitter = jump between readings</text>
+<rect x="180.0" y="835.0" width="600" height="64" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="863.0" font-size="13" text-anchor="middle" fill="#1F3864">Zero point follows slowly (τ: 15 s clear, 120 s active)</text><text x="480" y="880.0" font-size="13" text-anchor="middle" fill="#1F3864">(so movement re-zeroes, a real find does not fade)</text>
+<rect x="180.0" y="945.0" width="600" height="64" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="973.0" font-size="13" text-anchor="middle" fill="#1F3864">Map to 0–100%: antenna ÷ 150, field ÷ 250</text><text x="480" y="990.0" font-size="13" text-anchor="middle" fill="#1F3864">jitter ÷ 150 (antenna) and ÷ 100 (field)</text>
+<rect x="180.0" y="1055.0" width="600" height="64" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1083.0" font-size="13" text-anchor="middle" fill="#1F3864">signal = max(antenna %, field %)</text><text x="480" y="1100.0" font-size="13" text-anchor="middle" fill="#1F3864">jitter = max(antenna jitter %, field jitter %)</text>
+<polygon points="480,1164.0 630,1219.0 480,1274.0 330,1219.0" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1223.4" font-size="12.5" text-anchor="middle" fill="#1F3864">signal &lt; 15%?</text>
+<polygon points="480,1319.0 630,1374.0 480,1429.0 330,1374.0" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1378.4" font-size="12.5" text-anchor="middle" fill="#1F3864">jitter ≥ 50%?</text>
+<rect x="40.0" y="1195.0" width="240" height="48" rx="3" ry="3" fill="#F2F2F2" stroke="#1F3864" stroke-width="1.6"/><text x="160" y="1223.5" font-size="13" text-anchor="middle" fill="#1F3864">Status = CLEAR</text>
+<rect x="660.0" y="1350.0" width="260" height="48" rx="3" ry="3" fill="#F2F2F2" stroke="#1F3864" stroke-width="1.6"/><text x="790" y="1378.5" font-size="13" text-anchor="middle" fill="#1F3864">Status = POSSIBLE FAULT</text>
+<rect x="350.0" y="1474.0" width="260" height="48" rx="3" ry="3" fill="#F2F2F2" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1502.5" font-size="13" text-anchor="middle" fill="#1F3864">Status = WIRE DETECTED</text>
+<polygon points="420,1577.0 540,1577.0 480,1610.0" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/>
+<rect x="200.0" y="1650.0" width="560" height="50" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1671.0" font-size="13" text-anchor="middle" fill="#1F3864">Drive buzzer: clear silent, wire 100 ms every 800 ms,</text><text x="480" y="1688.0" font-size="13" text-anchor="middle" fill="#1F3864">fault 60 ms every 150 ms</text>
+<polygon points="218.0,1746.0 760.0,1746.0 742.0,1800.0 200.0,1800.0" fill="#F2F2F2" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1769.0" font-size="13" text-anchor="middle" fill="#1F3864">Print status line every 500 ms:</text><text x="480" y="1786.0" font-size="13" text-anchor="middle" fill="#1F3864">STATUS,signal,fieldPct,opampPct,jitterPct</text>
+<text x="644" y="550.0" font-size="11.5" text-anchor="start" fill="#1F3864">No</text>
+<text x="298" y="1207.0" font-size="11.5" text-anchor="end" fill="#1F3864">Yes</text>
+<text x="493" y="1293.0" font-size="11.5" text-anchor="start" fill="#1F3864">No</text>
+<text x="664" y="1362.0" font-size="11.5" text-anchor="start" fill="#1F3864">Yes</text>
+<text x="493" y="1464.0" font-size="11.5" text-anchor="start" fill="#1F3864">No</text>
+<text x="40" y="1816.0" font-size="11.5" text-anchor="start" fill="#1F3864">repeat every pass</text>
+</svg>

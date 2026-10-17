@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 2440" width="980" height="2440" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="980" height="2440" fill="#FFFFFF"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1F3864"/></marker></defs>
+<path d="M 480 64 L 480 107" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 153 L 480 180" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 300 L 480 520" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 650 240 L 780 240 L 780 304" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 780 356 L 780 405" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 780 475 L 780 505 L 500 505 L 500 520" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 553 L 480 624" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 676 L 480 700 L 260 700 L 260 728" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 700 L 700 700 L 700 728" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 260 792 L 260 850 L 460 850 L 460 880" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 700 792 L 700 860 L 500 860 L 500 880" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 913 L 480 944" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 996 L 480 1030" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 310 1090 L 160 1090 L 160 1166" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1150 L 480 1190" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 650 1250 L 800 1250 L 800 1286" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1310 L 480 1356" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1404 L 480 1480" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 160 1214 L 160 1445 L 450 1445 L 450 1480" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 800 1334 L 800 1455 L 510 1455 L 510 1480" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1513 L 480 1543" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1601 L 480 1652" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1708 L 480 1764" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1816 L 480 1873" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 1927 L 480 1984" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 2036 L 480 2055" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 630 2110 L 680 2110" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 2165 L 480 2240" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 800 2134 L 800 2210 L 510 2210 L 510 2240" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<path d="M 480 2273 L 480 2300" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<circle cx="480" cy="2300" r="4" fill="#1F3864"/>
+<path d="M 480 2300 L 30 2300 L 30 760 L 110 760" fill="none" stroke="#1F3864" stroke-width="1.6" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<path d="M 480 2304 L 480 2336" fill="none" stroke="#1F3864" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="340.0" y="16.0" width="280" height="48" rx="24.0" ry="24.0" fill="#1F3864" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="44.5" font-size="13" text-anchor="middle" font-weight="bold" fill="#FFFFFF">Power on the device</text>
+<rect x="330.0" y="107.0" width="300" height="46" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="134.6" font-size="13" text-anchor="middle" fill="#1F3864">Load board-field offsets from EEPROM</text>
+<polygon points="480,180 650,240 480,300 310,240" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="244.4" font-size="12.5" text-anchor="middle" fill="#1F3864">Offsets saved?</text>
+<rect x="630.0" y="304.0" width="300" height="52" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="780" y="326.1" font-size="13" text-anchor="middle" fill="#1F3864">Turn calibration:</text><text x="780" y="343.1" font-size="13" text-anchor="middle" fill="#1F3864">rotate slowly (figure-8)</text>
+<path d="M 630.0 419.0 A 150.0 14 0 0 1 930.0 419.0 L 930.0 461.0 A 150.0 14 0 0 1 630.0 461.0 Z" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><path d="M 630.0 419.0 A 150.0 14 0 0 1 930.0 419.0" fill="none" stroke="#1F3864" stroke-width="1.6"/><text x="780" y="453.6" font-size="13" text-anchor="middle" fill="#1F3864">Save offsets to EEPROM</text>
+<polygon points="420,520 540,520 480,553" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/>
+<rect x="265.0" y="624.0" width="430" height="52" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="646.0" font-size="13" text-anchor="middle" fill="#1F3864">Calibrate: learn rest level, wobble and jitter</text><text x="480" y="663.0" font-size="13" text-anchor="middle" fill="#1F3864">(hold it the way you will use it)</text>
+<rect x="110.0" y="728.0" width="300" height="64" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="260" y="756.0" font-size="13" text-anchor="middle" fill="#1F3864">Antenna path:</text><text x="260" y="773.0" font-size="13" text-anchor="middle" fill="#1F3864">peak-to-peak over 40 ms</text>
+<rect x="550.0" y="728.0" width="300" height="64" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="700" y="756.0" font-size="13" text-anchor="middle" fill="#1F3864">Magnetometer path:</text><text x="700" y="773.0" font-size="13" text-anchor="middle" fill="#1F3864">field strength (QMC5883P)</text>
+<polygon points="420,880 540,880 480,913" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/>
+<rect x="245.0" y="944.0" width="470" height="52" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="966.0" font-size="13" text-anchor="middle" fill="#1F3864">Signal = strongest path beyond calibrated wobble</text><text x="480" y="983.0" font-size="13" text-anchor="middle" fill="#1F3864">Jitter = extra jumpiness beyond calibration</text>
+<polygon points="480,1030 650,1090 480,1150 310,1090" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1094.4" font-size="12.5" text-anchor="middle" fill="#1F3864">Signal ≥ 15%?</text>
+<rect x="40.0" y="1166.0" width="240" height="48" rx="3" ry="3" fill="#F2F2F2" stroke="#1F3864" stroke-width="1.6"/><text x="160" y="1194.5" font-size="13" text-anchor="middle" fill="#1F3864">Status = CLEAR</text>
+<polygon points="480,1190 650,1250 480,1310 310,1250" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1254.4" font-size="12.5" text-anchor="middle" fill="#1F3864">Jitter ≥ 50%?</text>
+<rect x="350.0" y="1356.0" width="260" height="48" rx="3" ry="3" fill="#F2F2F2" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1384.5" font-size="13" text-anchor="middle" fill="#1F3864">Status = WIRE DETECTED</text>
+<rect x="680.0" y="1286.0" width="240" height="48" rx="3" ry="3" fill="#F2F2F2" stroke="#1F3864" stroke-width="1.6"/><text x="800" y="1314.5" font-size="13" text-anchor="middle" fill="#1F3864">Status = POSSIBLE FAULT</text>
+<polygon points="420,1480 540,1480 480,1513" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/>
+<path d="M 245.0 1543.0 L 715.0 1543.0 L 715.0 1587.0 Q 480 1617.0 245.0 1587.0 Z" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1564.0" font-size="13" text-anchor="middle" fill="#1F3864">OLED shows status; buzzer:</text><text x="480" y="1581.0" font-size="13" text-anchor="middle" fill="#1F3864">silent / slow beep / fast urgent beep</text>
+<polygon points="248.0,1652.0 730.0,1652.0 712.0,1708.0 230.0,1708.0" fill="#F2F2F2" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1676.0" font-size="13" text-anchor="middle" fill="#1F3864">Send every 500 ms over UART (9600):</text><text x="480" y="1693.0" font-size="13" text-anchor="middle" fill="#1F3864">STATUS,signal,fieldPct,opampPct,jitterPct</text>
+<rect x="265.0" y="1764.0" width="430" height="52" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><line x1="277.0" y1="1764.0" x2="277.0" y2="1816.0" stroke="#1F3864" stroke-width="1.6"/><line x1="683.0" y1="1764.0" x2="683.0" y2="1816.0" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1786.0" font-size="13" text-anchor="middle" fill="#1F3864">ESP32 relay:</text><text x="480" y="1803.0" font-size="13" text-anchor="middle" fill="#1F3864">forwards each line over Bluetooth SPP</text>
+<polygon points="283.0,1873.0 695.0,1873.0 677.0,1927.0 265.0,1927.0" fill="#F2F2F2" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="1904.5" font-size="13" text-anchor="middle" fill="#1F3864">Bluetooth stream to the phone app</text>
+<rect x="250.0" y="1984.0" width="460" height="52" rx="3" ry="3" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="2006.0" font-size="13" text-anchor="middle" fill="#1F3864">App parses line, updates live screen</text><text x="480" y="2023.0" font-size="13" text-anchor="middle" fill="#1F3864">(meter, trace, peak)</text>
+<polygon points="480,2055 630,2110 480,2165 330,2110" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="2114.4" font-size="12.5" text-anchor="middle" fill="#1F3864">Alert = FAULT?</text>
+<rect x="680.0" y="2086.0" width="240" height="48" rx="3" ry="3" fill="#F2F2F2" stroke="#1F3864" stroke-width="1.6"/><text x="800" y="2106.1" font-size="13" text-anchor="middle" fill="#1F3864">Vibrate phone, show</text><text x="800" y="2123.1" font-size="13" text-anchor="middle" fill="#1F3864">POSSIBLE FAULT</text>
+<polygon points="420,2240 540,2240 480,2273" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.6"/>
+<rect x="380.0" y="2336.0" width="200" height="48" rx="24.0" ry="24.0" fill="#1F3864" stroke="#1F3864" stroke-width="1.6"/><text x="480" y="2364.6" font-size="13" text-anchor="middle" font-weight="bold" fill="#FFFFFF">Power off</text>
+<rect x="15" y="15" width="310" height="178" rx="4" ry="4" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.2"/>
+<rect x="39" y="51" width="34" height="16" rx="8" ry="8" fill="#1F3864"/>
+<rect x="39" y="89" width="34" height="16" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.4"/>
+<polygon points="56,125 73,135 56,145 39,135" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.4"/>
+<rect x="39" y="167" width="34" height="12" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.4"/><ellipse cx="56" cy="167" rx="17" ry="4" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.4"/>
+<polygon points="201,51 229,51 223,67 195,67" fill="#F2F2F2" stroke="#1F3864" stroke-width="1.4"/>
+<polygon points="195,88 229,88 212,104" fill="#DCE6F1" stroke="#1F3864" stroke-width="1.4"/>
+<rect x="195" y="127" width="34" height="16" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.4"/><line x1="200" y1="127" x2="200" y2="143" stroke="#1F3864" stroke-width="1.4"/><line x1="224" y1="127" x2="224" y2="143" stroke="#1F3864" stroke-width="1.4"/>
+<path d="M 195 165 L 229 165 L 229 176 Q 212 186 195 176 Z" fill="#FFFFFF" stroke="#1F3864" stroke-width="1.4"/>
+<text x="493" y="330" font-size="11.5" text-anchor="start" fill="#1F3864">Yes</text>
+<text x="664" y="228" font-size="11.5" text-anchor="start" fill="#1F3864">No / button held</text>
+<text x="493" y="1180" font-size="11.5" text-anchor="start" fill="#1F3864">Yes</text>
+<text x="298" y="1078" font-size="11.5" text-anchor="end" fill="#1F3864">No</text>
+<text x="662" y="1238" font-size="11.5" text-anchor="start" fill="#1F3864">Yes</text>
+<text x="493" y="1340" font-size="11.5" text-anchor="start" fill="#1F3864">No</text>
+<text x="655" y="2098" font-size="11.5" text-anchor="start" fill="#1F3864">Yes</text>
+<text x="493" y="2205" font-size="11.5" text-anchor="start" fill="#1F3864">No</text>
+<text x="40" y="2288" font-size="11.5" text-anchor="start" fill="#1F3864">repeat, next sensing cycle</text>
+<text x="493" y="2320" font-size="11.5" text-anchor="start" fill="#1F3864">power off</text>
+<text x="170.0" y="32" font-size="11.5" text-anchor="middle" font-weight="bold" fill="#1F3864">Flowchart symbols used (per guide)</text>
+<text x="83" y="63" font-size="11.5" text-anchor="start" fill="#1F3864">Start / End</text>
+<text x="83" y="101" font-size="11.5" text-anchor="start" fill="#1F3864">Process</text>
+<text x="83" y="139" font-size="11.5" text-anchor="start" fill="#1F3864">Decision</text>
+<text x="83" y="177" font-size="11.5" text-anchor="start" fill="#1F3864">Database</text>
+<text x="239" y="63" font-size="11.5" text-anchor="start" fill="#1F3864">Data / I/O</text>
+<text x="239" y="101" font-size="11.5" text-anchor="start" fill="#1F3864">Merge</text>
+<text x="239" y="139" font-size="11.5" text-anchor="start" fill="#1F3864">Sub-process</text>
+<text x="239" y="177" font-size="11.5" text-anchor="start" fill="#1F3864">Documentation</text>
+</svg>
