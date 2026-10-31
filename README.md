@@ -8,19 +8,19 @@ ever touching the wiring. The phone shows the live reading over Bluetooth.
 
 | Part | Folder | What it is |
 |------|--------|------------|
-| **Firmware** | [`firmware/`](firmware/) | Arduino Uno sketch. Reads the sensors, runs the self-calibration and the Clear / Wire / Fault classification, drives the OLED and buzzer, and streams status lines to the ESP32. |
-| **Backend** | [`backend/`](backend/) | ESP32 relay sketch. The gateway between the sensor and the phone: receives the Uno's serial stream and serves it to any client over Bluetooth Classic (SPP). |
-| **Frontend** | [`frontend/EMFReader/`](frontend/EMFReader/) | Android app (**EMF-SENSE**, Kotlin + Jetpack Compose). Connects to the relay, decodes the protocol, and shows live readings, history trace, and alerts. |
+| **Firmware** | [`firmware/`](firmware/) | Arduino Uno sketch. Reads the sensors, runs the self-calibration and the Clear / Wire / Fault classification, drives the OLED (including the Bluetooth pairing code) and buzzer, and streams status lines to the ESP32. |
+| **Backend** | [`backend/`](backend/) | ESP32 relay sketch. The gateway between the sensor and the phone: receives the Uno's serial stream and serves it over Bluetooth LE (Nordic UART Service, GATT) with MITM static-passkey pairing. |
+| **Frontend** | [`frontend/EMFReader/`](frontend/EMFReader/) | Android app (**EMF-SENSE**, Kotlin + Jetpack Compose). Scans for the relay over BLE, connects, decodes the protocol, and shows live readings, history trace, and alerts. |
 
 ## System architecture
 
 ```
- ┌──────────────────────────┐   UART 9600 baud   ┌───────────────────────┐   Bluetooth Classic   ┌─────────────────────┐
- │  Arduino Uno             │  D3 ──[divider]──► │  ESP32                │   SPP (RFCOMM)        │  Android phone      │
+ ┌──────────────────────────┐   UART 9600 baud   ┌───────────────────────┐   Bluetooth LE (GATT)  ┌─────────────────────┐
+ │  Arduino Uno             │  D3 ──[divider]──► │  ESP32                │   Nordic UART Service  │  Android phone      │
  │  firmware/               │  D2 ◄───────────── │  backend/             │ ◄───────────────────► │  frontend/EMFReader │
  │                          │  GND ◄──────────►  │                       │   "EMF_Wire_Detector" │  app "EMF-SENSE"    │
- │  antenna+op-amp, QMC5883P│                    │  UART2 ↔ BT relay     │   PIN 1234            │  live UI + alerts   │
- │  OLED, buzzer, button    │                    │                       │                       │                     │
+ │  antenna+op-amp, QMC5883P│                    │  UART2 ↔ BLE relay    │   MITM static passkey │  live UI + alerts   │
+ │  OLED, buzzer, button    │                    │                       │   (type-in code)      │                     │
  └──────────────────────────┘                    └───────────────────────┘                       └─────────────────────┘
 ```
 
@@ -43,7 +43,10 @@ Two independent sensing paths run at once:
 Nothing is hard-coded: calibration learns, for each path, the resting level,
 how much the reading naturally wobbles, and how much it jumps between
 readings. Only changes beyond that learned wobble count as a signal; only
-extra jumpiness beyond what was learned counts as jitter.
+extra jumpiness beyond what was learned counts as jitter. The board's own
+fixed magnetism (hard-iron offsets) is learned automatically from normal
+handling and saved to EEPROM once every axis has swept enough — there is no
+manual turning step (v13).
 
 Classification (on the Arduino, mirrored by the app):
 
@@ -62,8 +65,14 @@ line sent to the ESP32.
 ```
 EMF-Wire-Fault-Detector/
 ├── firmware/
-│   └── EMF_Wire_Fault_Detector_v11/
-│       └── EMF_Wire_Fault_Detector_v11.ino   # Arduino Uno sketch
+│   ├── EMF_Wire_Fault_Detector_v11/          # previous version
+│   │   └── EMF_Wire_Fault_Detector_v11.ino
+│   ├── EMF_Wire_Fault_Detector_v12/          # previous version
+│   │   └── EMF_Wire_Fault_Detector_v12.ino
+│   ├── EMF_Wire_Fault_Detector_v13/          # previous version
+│   │   └── EMF_Wire_Fault_Detector_v13.ino
+│   └── EMF_Wire_Fault_Detector_v14/          # current version
+│       └── EMF_Wire_Fault_Detector_v14.ino   # Arduino Uno sketch
 ├── backend/
 │   └── ESP32_BT_Relay_2/
 │       └── ESP32_BT_Relay_2.ino              # ESP32 Bluetooth relay sketch
@@ -80,6 +89,9 @@ EMF-Wire-Fault-Detector/
 │   ├── erd.svg / .png                        # entity-relationship diagram
 │   ├── flowchart.svg / .png                  # system flowchart
 │   └── flowchart-firmware.svg / .png         # firmware logic flowchart
+├── tools/
+│   ├── v13-host-tests/                       # g++ unit tests for the v13 pure logic
+│   └── v14-host-tests/                       # g++ unit tests for the v14 pairing overlay + press/hold logic
 └── README.md
 ```
 
@@ -89,9 +101,9 @@ All formal project documents live in [`docs/`](docs/):
 
 | Document | What it covers |
 |---|---|
-| [API specification](docs/api-specification.md) | The integration interface: Bluetooth SPP service, authentication (fixed PIN 1234), message formats, timing limits, failure taxonomy, firmware compatibility |
+| [API specification](docs/api-specification.md) | The integration interface: BLE GATT (Nordic UART Service) with MITM static-passkey authentication (pairing-window 6-digit code typed on the phone), message formats, timing limits, failure taxonomy, firmware compatibility |
 | [Data schema](docs/data-schema.md) + [ERD](docs/erd.svg) ([PNG](docs/erd.png)) | Data dictionary and Chen-notation entity-relationship diagram: readings, sessions, devices, alert levels and the EEPROM calibration layout — each mapped to the store it really lives in |
-| [Architecture Decision Records](docs/adr/) | Five ADRs: why Bluetooth Classic SPP, the two-board edge design, self-calibrating thresholds, the magnetometer handheld approach, and the monorepo |
+| [Architecture Decision Records](docs/adr/) | Nine ADRs: why Bluetooth Classic SPP (superseded by ADR-0009), the two-board edge design, self-calibrating thresholds, the magnetometer handheld approach, the monorepo, automatic hard-iron calibration, dynamic display-PIN pairing, the pairing-window type-in PIN, and the move to BLE UART + static-passkey pairing |
 | [Validation report](docs/validation-report.md) | Test plan with fillable result tables: performance, interoperability, reliability, and low-voltage fault-injection tests |
 | [System flowchart](docs/flowchart.svg) ([PNG](docs/flowchart.png)) | End-to-end flow: power-on → calibration → sensing → classification → relay → phone |
 | [Firmware flowchart](docs/flowchart-firmware.svg) ([PNG](docs/flowchart-firmware.png)) | How one sensing cycle processes the signals and decides Clear / Wire / Fault |
@@ -141,21 +153,25 @@ authentication, timing limits, failure taxonomy — are in the
 
 ### 1. Firmware — Arduino Uno
 
-1. Open `firmware/EMF_Wire_Fault_Detector_v11/EMF_Wire_Fault_Detector_v11.ino` in the Arduino IDE.
-2. Install via **Library Manager**: *Adafruit GFX Library* and *Adafruit SSD1306*.
-   (The QMC5883P is read directly over `Wire`, no extra library needed.)
+1. Open `firmware/EMF_Wire_Fault_Detector_v14/EMF_Wire_Fault_Detector_v14.ino` in the Arduino IDE.
+2. Install via **Library Manager**: *U8g2*. (The QMC5883P is read
+   directly over `Wire`, no extra library needed. Older firmware versions
+   v11–v13 used *Adafruit GFX* + *Adafruit SSD1306* instead.)
 3. Select **Arduino Uno** and upload.
 
-Serial Monitor (9600 baud): `c` re-runs calibration, `t` redoes the turning
-step + calibration.
+Serial Monitor (9600 baud): `c` re-runs calibration, `p` opens the
+Bluetooth pairing window, `t` forgets the learned hard-iron offsets (they
+re-learn automatically from normal use).
 
 ### 2. Backend — ESP32
 
 1. Open `backend/ESP32_BT_Relay_2/ESP32_BT_Relay_2.ino` in the Arduino IDE.
 2. Install the **esp32** board package (Espressif) via **Boards Manager**.
 3. Select your ESP32 board and upload.
-4. On the phone: pair with **`EMF_Wire_Detector`** (PIN **1234**) in the system
-   Bluetooth settings.
+4. The relay is a BLE peripheral advertising **`EMF_Wire_Detector`** with the
+   Nordic UART Service, **locked by default**: the static passkey is a
+   random secret nobody knows, so pairing only works during the 60 s
+   **pairing window** — see "Pair a phone" below.
 
 ### 3. Frontend — Android app
 
@@ -170,19 +186,29 @@ step + calibration.
    ./gradlew test             # unit tests
    ```
 
-3. In the app: allow Bluetooth access, pick the paired sensor, and hold the
-   phone near the detector. No readings are stored or sent anywhere — the app
-   talks straight to the relay.
+3. In the app: allow Bluetooth access, tap the sensor in the scan list
+   (tap **Connect**), and hold the phone near the detector. No readings
+   are stored or sent anywhere — the app talks straight to the relay.
 
 ### Using the device
 
-- **First power-up after assembly:** the OLED asks you to turn the device
-  slowly in all directions (figure-8) for a few seconds. This learns the
-  board's own fixed magnetism and is saved to EEPROM, so you only do it once.
+- **First power-up after assembly:** the OLED shows *Calibrating...* until the
+  device has learned its own fixed magnetism from normal handling — move it
+  through different orientations as you use it. Once every axis has swept
+  enough, the offsets are saved to EEPROM automatically and the hint
+  disappears for good.
 - **Normal operation:** power up, hold the device the way you will use it, and
   wait out the countdown while it calibrates.
-- **Recalibrate any time:** press the button, or send `c`. Hold the button
-  while powering on (or send `t`) to redo the turning step.
+- **Recalibrate any time:** press the button, or send `c`. Send `t` to forget
+  the learned hard-iron offsets, so they are re-learned from normal use.
+- **Pair a phone:** open the pairing window FIRST — hold the button 2 s
+  (or send `p`); the OLED shows a fresh 6-digit code. Then in the app,
+  tap the sensor and **Connect**: the phone shows a passkey dialog —
+  **type the code from the OLED** and confirm. The window lasts 60 s and
+  wrong entries can be retried with the same code; afterwards the device
+  re-locks with a new random secret. Bonded phones reconnect silently.
+  While locked, the passkey is an unknown random secret, so pairing
+  cannot succeed.
 
 ## Safety
 

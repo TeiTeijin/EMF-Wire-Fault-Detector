@@ -91,12 +91,13 @@ hence partial participation on the ERD).
 
 | Attribute | Type | Domain / constraint | Notes |
 |---|---|---|---|
-| `address` | text (PK) | MAC address | Assigned by the OS when pairing |
+| `address` | text (PK) | MAC address | BLE address from the relay's advertisement |
 | `name` | text | `EMF_Wire_Detector` | Relay's advertised name |
 
-**Physical store:** the phone OS's Bluetooth bond table; the app lists the
-bonded entries whose name is the relay's or whose services expose the SPP
-UUID. No readings are stored on or discovered from the device itself.
+**Physical store:** discovered by a BLE scan for the relay's
+advertisement (Nordic UART Service UUID); after pairing, the bond lives
+in the phone OS's Bluetooth bond table. No readings are stored on or
+discovered from the device itself.
 
 ## 5. Entity: `CALIBRATION` — saved board-field offsets (weak entity)
 
@@ -105,7 +106,7 @@ recalibration overwrites the single saved row for that device.
 
 | Attribute | Type | Domain / constraint | Notes |
 |---|---|---|---|
-| `marker` | byte | must equal `0xA5` | Validity flag: without it the offsets are ignored |
+| `marker` | byte | must equal `0xB7` (v13) | Validity flag: without it the offsets are ignored; older versions used `0xA5` and their offsets are discarded |
 | `off_x` | int16 | counts | Board's own fixed field, X axis |
 | `off_y` | int16 | counts | Y axis |
 | `off_z` | int16 | counts | Z axis |
@@ -114,14 +115,16 @@ recalibration overwrites the single saved row for that device.
 
 | EEPROM byte(s) | Content |
 |---|---|
-| `0` | marker `0xA5` |
+| `0` | marker `0xB7` |
 | `1–2` | `off_x` (int16) |
 | `3–4` | `off_y` (int16) |
 | `5–6` | `off_z` (int16) |
 
-Write rule: offsets are saved only if at least **two axes** were really swept
-during the turning calibration (each with a min–max span ≥ 600 counts), so a
-bad sweep is never persisted.
+Write rule (v13): offsets are learned automatically in the background from
+normal handling and saved only when **all three axes** have swept ≥ 600 counts
+each, so a one-plane sweep (or a sweep done next to strong local field
+distortions) is never persisted as if it were complete. Saved offsets keep
+refining as new orientations are seen (saves are throttled).
 
 ### Runtime calibration state (RAM-only, re-learned every boot)
 
@@ -136,7 +139,7 @@ completeness of the schema:
 | `base_mag` | Mean field strength while calibrating | Until next calibration |
 | `field_band` | Field strength wobble while calibrating | Until next calibration |
 | `field_jitter` | Average field jump while calibrating | Until next calibration |
-| `zero_point` | **Derived:** field strength zero point; starts at `base_mag` and follows the device (τ 15 s clear / 120 s active) | Session |
+| `zero_point` | **Derived:** field strength zero point; starts at `base_mag` and follows the device (τ 5 s clear / 60 s wire / 120 s fault) | Session |
 
 ## 6. Storage mapping (summary)
 
@@ -160,4 +163,5 @@ completeness of the schema:
 4. **Bounded history:** the trace holds at most 30 rows; the oldest is
    evicted (no unbounded growth anywhere in the system).
 5. **Write-conditioned persistence:** EEPROM is written only behind the
-   2-axes/600-count sweep check; the reload path requires the `0xA5` marker.
+   all-3-axes/600-count auto-calibration sweep check; the reload path
+   requires the `0xB7` marker (older `0xA5` rows are discarded).
