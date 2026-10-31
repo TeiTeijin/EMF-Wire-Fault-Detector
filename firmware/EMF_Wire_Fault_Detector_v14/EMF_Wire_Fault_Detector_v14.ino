@@ -6,8 +6,9 @@
     - SSD1306 OLED 128x64 (I2C, address 0x3C)           -> same A4 = SDA, A5 = SCL
     - 3-pin active buzzer module (VCC, GND, I/O)        -> pin 8
     - Push button (manual recalibration)                -> pin 7 (other leg to GND)
-    - Link to ESP32 for Bluetooth: D2 (RX) / D3 (TX, through voltage
-      divider) via SoftwareSerial
+    - Link to ESP32 for Bluetooth: D12 (RX) / D11 (TX, through voltage
+      divider) via SoftwareSerial (moved off D2/D3 after a solder bridge
+      shorted those pins on this build)
 
   v14 CHANGES (from v13):
     - Pairing-code overlay: the ESP32 relay now sends "PIN,<code>" over
@@ -94,10 +95,13 @@
 #include "verdict.h"
 #include "paircode.h"
 #include "edgebutton.h"
+#include "softuart.h"
 
-// Link to ESP32: Arduino D3 (TX, through voltage divider) -> ESP32 RX
-//                Arduino D2 (RX) <- ESP32 TX (direct, no divider needed)
-SoftwareSerial espSerial(2, 3); // RX, TX
+// Link to ESP32: Arduino D11 (TX, through voltage divider) -> ESP32 RX
+//                Arduino D10 (RX) <- ESP32 TX (direct, no divider needed)
+// SoftwareSerial is TX-only here (dummy RX on unused pin 6): the real
+// receiver is the Timer2 software UART on D10.
+SoftwareSerial espSerial(6, 11); // RX (dummy), TX
 unsigned long lastEspSend = 0;
 const int ESP_SEND_INTERVAL = 500; // ms
 
@@ -147,12 +151,22 @@ PairCodeOverlay pairCode;
 char espLineBuf[21];   // longest line: "PIN," + 16 digits + NUL = 21
 uint8_t espLineLen = 0;
 
+// Software UART receiver: Timer2 samples the RX line (D10) every 32 us
+// and SoftUartRx (softuart.h, host-tested) assembles the bytes. This
+// replaces SoftwareSerial's receiver, which proved unreliable on this
+// build. The transmitter stays on SoftwareSerial (D11).
+SoftUartRx softRx;
+
+ISR(TIMER2_COMPA_vect) {
+  softRx.sample(digitalRead(10) != LOW);
+}
+
 // Reads pending bytes from the ESP32 link and feeds complete lines to
 // the pairing overlay. The relay repeats the PIN line every 500 ms, so
 // missing a poll window only delays the display, never loses the code.
 void pollPairLines() {
-  while (espSerial.available()) {
-    char c = espSerial.read();
+  while (softRx.available() > 0) {
+    char c = (char)softRx.read();
     if (c == '\r') continue;   // relay println sends CRLF; strip the CR
     if (c == '\n') {
       espLineBuf[espLineLen] = '\0';
@@ -251,14 +265,14 @@ const int WIRE_BEEP_GAP = 800;  // ms between pulses
 const int FAULT_BEEP_GAP = 150; // ms, fast urgent beep for possible fault
 
 // ---------- BUTTON ----------
-// 1 kHz Timer1 interrupt + press/hold classifier. Sampling the button
+// 100 Hz Timer1 interrupt + press/hold classifier. Sampling the button
 // from an interrupt means a short tap can never fall between main-loop
 // samples. Quick press = SHORT_PRESS (recalibrate), hold reaching 2 s =
 // LONG_HOLD, fired AT the 2 s mark while still held (pairing window).
 // Pure logic lives in edgebutton.h (host-tested).
 EdgeButtonPoller buttonPoller;
 
-// Timer1 compare ISR at 1 kHz: feed the button level into the edge
+// Timer1 compare ISR at 100 Hz: feed the button level into the edge
 // classifier. (Pin-change interrupts would collide with SoftwareSerial,
 // which owns the PCINT2 group for pins 2/3.)
 ISR(TIMER1_COMPA_vect) {
@@ -353,16 +367,27 @@ void setup() {
   pinMode(buttonPin, INPUT_PULLUP);
   buzzerWrite(false); // start silent
 
-  // 1 kHz button sampling via Timer1 compare (CTC, top = OCR1A):
-  // 16 MHz / (15999 + 1) = 1000 Hz. Timer1 is otherwise unused, and
-  // this avoids the PCINT2 group that SoftwareSerial owns for pins 2/3.
+  // 100 Hz button sampling via Timer1 compare (CTC, top = OCR1A):
+  // 16 MHz / (159999 + 1) = 100 Hz - 10 ms resolution, plenty for a
+  // 50 ms-debounced button, and gentle enough not to disturb the
+  // software UART receiver. Timer1 is otherwise unused, and this
+  // avoids the PCINT2 group that SoftwareSerial owns for pins 2/3.
   noInterrupts();
   TCCR1A = 0;
   TCCR1B = 0;
-  OCR1A  = 15999;
+  OCR1A  = 159999;
   TCCR1B |= (1 << WGM12);   // CTC mode
   TCCR1B |= (1 << CS10);    // prescaler 1
   TIMSK1 |= (1 << OCIE1A);  // enable compare A interrupt
+
+  // 31.25 kHz sampling for the software UART receiver (Timer2 CTC):
+  // 16 MHz / 64 / (7 + 1) = 31250 Hz = 3.255 samples per 9600-baud bit.
+  TCCR2A = 0;
+  TCCR2B = 0;
+  OCR2A  = 7;
+  TCCR2A |= (1 << WGM21);   // CTC mode
+  TCCR2B |= (1 << CS22);    // prescaler 64
+  TIMSK2 |= (1 << OCIE2A);  // enable compare A interrupt
   interrupts();
 
   // Probe the OLED on the I2C bus (U8g2 has no failure report of its
