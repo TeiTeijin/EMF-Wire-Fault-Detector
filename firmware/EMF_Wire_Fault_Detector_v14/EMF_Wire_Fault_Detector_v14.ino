@@ -93,6 +93,7 @@
 #include "autocal.h"
 #include "verdict.h"
 #include "paircode.h"
+#include "buttonpoll.h"
 #include "presshold.h"
 
 // Link to ESP32: Arduino D3 (TX, through voltage divider) -> ESP32 RX
@@ -250,17 +251,13 @@ const int WIRE_BEEP_ON  = 100;  // ms, short pulse for "wire detected"
 const int WIRE_BEEP_GAP = 800;  // ms between pulses
 const int FAULT_BEEP_GAP = 150; // ms, fast urgent beep for possible fault
 
-// ---------- BUTTON DEBOUNCE ----------
-bool stableButtonState = HIGH;   // debounced state (HIGH = not pressed)
-bool lastRawReading = HIGH;
-unsigned long lastButtonChangeTime = 0;
-const unsigned long DEBOUNCE_DELAY = 50; // ms
-
-// Press/hold classifier: a quick press = SHORT_PRESS (recalibrate), a
-// hold reaching 2 s = LONG_HOLD (open the Bluetooth pairing window) -
-// fired once, with no SHORT_PRESS on release. Pure logic lives in
-// presshold.h (host-tested); it is fed with the debounced state above.
-PressHold pressHold;
+// ---------- BUTTON ----------
+// High-rate sampler + 50 ms debounce + press/hold classifier. It is fed
+// inside the 40 ms measurement window as well as in loop(), so a short
+// tap can never fall between samples. Quick press = SHORT_PRESS
+// (recalibrate), hold reaching 2 s = LONG_HOLD (pairing window).
+// Pure logic lives in buttonpoll.h (host-tested).
+ButtonPoller buttonPoller;
 
 // ---------- QMC5883P helpers ----------
 void writeQmc(byte reg, byte val) {
@@ -331,7 +328,8 @@ bool loadOffsets() {
   return true;
 }
 
-// Peak-to-peak of the op-amp output over a 40 ms window.
+// Peak-to-peak of the op-amp output over a 40 ms window. The button is
+// also sampled in here, so even a ~50 ms tap is seen pressed.
 int measureP2P() {
   int lo = 1023, hi = 0;
   unsigned long start = millis();
@@ -339,6 +337,7 @@ int measureP2P() {
     int v = analogRead(opampPin);
     if (v < lo) lo = v;
     if (v > hi) hi = v;
+    buttonPoller.feedRaw(digitalRead(buttonPin) == LOW, millis());
   }
   return hi - lo;
 }
@@ -499,7 +498,7 @@ void takeBaselineReadings() {
   Serial.print(F(" jitter=")); Serial.println(calFieldJitter);
 }
 
-// Updates a rolling average and returns the average.
+// Updates the rolling average and returns the average.
 int smoothAverage(int rawValue, int *readings, long *total) {
   *total -= readings[smoothIndex];
   readings[smoothIndex] = rawValue;
@@ -507,31 +506,15 @@ int smoothAverage(int rawValue, int *readings, long *total) {
   return *total / SMOOTH_SAMPLES;
 }
 
-// Updates the debounced button state (stableButtonState). The PressHold
-// classifier in loop() turns that state into SHORT_PRESS / LONG_HOLD
-// events, so the raw press-edge trigger no longer lives here.
-void updateButtonDebounce() {
-  bool reading = digitalRead(buttonPin);
-
-  if (reading != lastRawReading) {
-    lastButtonChangeTime = millis();   // raw reading changed, restart timer
-    lastRawReading = reading;
-  }
-
-  if ((millis() - lastButtonChangeTime) > DEBOUNCE_DELAY && reading != stableButtonState) {
-    stableButtonState = reading;
-  }
-}
-
 void loop() {
   // Pairing-code lines from the ESP32 relay (may arrive any time).
   pollPairLines();
 
-  // Button: the debounce feeds the press/hold classifier. One action per
-  // physical press: quick = recalibrate, hold 2 s = pairing window.
-  updateButtonDebounce();
-  pressHold.update(stableButtonState == LOW, millis());
-  PressHold::Event buttonEvent = pressHold.takeEvent();
+  // Button: sampled at high rate inside measureP2P(); drain any latched
+  // event here. One action per physical press: quick = recalibrate,
+  // hold 2 s = pairing window.
+  buttonPoller.feedRaw(digitalRead(buttonPin) == LOW, millis());
+  ButtonPoller::Event buttonEvent = buttonPoller.takeEvent();
 
   // Commands from the Serial Monitor (no button needed):
   //   c = recalibrate rest baseline
@@ -547,12 +530,12 @@ void loop() {
     runCalibrationSequence(3);
     return;
   }
-  if (buttonEvent == PressHold::SHORT_PRESS || cmd == 'c' || cmd == 'C') {
+  if (buttonEvent == ButtonPoller::SHORT_PRESS || cmd == 'c' || cmd == 'C') {
     Serial.println(F("Recalibrating"));
     runCalibrationSequence(3);
     return;
   }
-  if (buttonEvent == PressHold::LONG_HOLD || cmd == 'p' || cmd == 'P') {
+  if (buttonEvent == ButtonPoller::LONG_HOLD || cmd == 'p' || cmd == 'P') {
     Serial.println(F("Pairing window requested"));
     sendPairOn();
     // No return here: sensing keeps running while the window is open.
