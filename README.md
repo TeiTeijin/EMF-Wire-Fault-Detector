@@ -121,16 +121,16 @@ All formal project documents live in [`docs/`](docs/):
 | SSD1306 OLED 128×64 — SDA / SCL (I2C, address `0x3C`, `0x3D` fallback) | `A4` / `A5` |
 | Buzzer module (3-pin: VCC, GND, I/O; active-low by default) | `8` |
 | Push button to GND (internal pull-up) | `7` |
-| Link to ESP32 — TX via voltage divider | `D3` |
-| Link to ESP32 — RX | `D2` |
+| Link to ESP32 — TX via voltage divider | `D11` |
+| Link to ESP32 — RX | `D10` |
 
 The OLED and the magnetometer share the same two I2C wires; that works because
 their addresses differ (`0x3C` vs `0x2C`).
 
 **Link to the ESP32 (mind the voltage)**
 
-- Arduino `D3` (TX, 5 V) → **voltage divider down to 3.3 V** → ESP32 `GPIO16` (RX2)
-- Arduino `D2` (RX) ← ESP32 `GPIO17` (TX2) — direct, no divider needed
+- Arduino `D11` (TX, 5 V) → **voltage divider down to 3.3 V** → ESP32 `GPIO16` (RX2)
+- Arduino `D10` (RX) ← ESP32 `GPIO18` (TX2) — direct, no divider needed
 - Arduino `GND` ↔ ESP32 `GND` — required, even though the ESP32 is powered
   separately (e.g. a power bank over USB)
 

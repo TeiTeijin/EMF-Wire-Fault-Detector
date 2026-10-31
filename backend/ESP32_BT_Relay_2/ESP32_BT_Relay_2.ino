@@ -152,7 +152,7 @@ public:
 
 void setup() {
   Serial.begin(115200);
-  ArduinoLink.begin(9600, SERIAL_8N1, 16, 17);
+  ArduinoLink.begin(9600, SERIAL_8N1, 16, 18);
 
   BLEDevice::init("EMF_Wire_Detector");
 

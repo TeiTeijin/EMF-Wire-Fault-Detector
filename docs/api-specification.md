@@ -75,7 +75,7 @@ required in addition to `BLUETOOTH_CONNECT`.
 | Property | Value |
 |---|---|
 | Format | 9600 baud, 8N1 |
-| Wiring | Arduino `D3` (TX, 5 V) → voltage divider → ESP32 `GPIO16` (RX2); Arduino `D2` (RX) ← ESP32 `GPIO17` (TX2); common GND required |
+| Wiring | Arduino `D11` (TX, 5 V) → voltage divider → ESP32 `GPIO16` (RX2); Arduino `D10` (RX) ← ESP32 `GPIO18` (TX2); common GND required |
 | Framing | Newline-terminated lines (`println`), accumulates bytes into ASCII text |
 
 The relay is a transparent forwarder: it sends each complete line to the
