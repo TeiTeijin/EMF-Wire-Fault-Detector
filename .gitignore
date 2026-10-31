@@ -3,5 +3,8 @@
 Thumbs.db
 desktop.ini
 
+# Compiled host-test binaries (source lives in tools/*-host-tests/*.cpp)
+*.exe
+
 # (The Android project under frontend/EMFReader/ carries its own
 #  .gitignore files, and the Arduino sketches have no build output.)
