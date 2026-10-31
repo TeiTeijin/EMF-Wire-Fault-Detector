@@ -6,7 +6,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.beep.emfreader.data.EmfAlertLevel
 import com.beep.emfreader.data.EmfDevice
-import com.beep.emfreader.data.EmfSppContract
+import com.beep.emfreader.data.EmfContract
 import com.beep.emfreader.data.ReadingHistory
 import com.beep.emfreader.ui.EmfLiveScreen
 import com.beep.emfreader.ui.theme.EMFReaderTheme
@@ -21,10 +21,10 @@ class EmfReadingsRenderTest {
     @get:Rule
     val compose = createComposeRule()
 
-    private val device = EmfDevice(EmfSppContract.RELAY_NAME, "20:50:0D:2A:61:B2")
+    private val device = EmfDevice(EmfContract.RELAY_NAME, "20:50:0D:2A:61:B2")
 
     private fun readingsFrom(line: String) =
-        requireNotNull(EmfSppContract.parseLine(line))
+        requireNotNull(EmfContract.parseLine(line))
 
     @Test
     fun sensorLineDecodesAndRendersTheThreeChannels() {

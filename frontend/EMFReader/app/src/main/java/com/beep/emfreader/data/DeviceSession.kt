@@ -19,7 +19,7 @@ sealed interface SessionEvent {
 }
 
 data class SessionTiming(
-    val readingIntervalMillis: Long = EmfSppContract.SEND_INTERVAL_MILLIS,
+    val readingIntervalMillis: Long = EmfContract.SEND_INTERVAL_MILLIS,
     val historyPoints: Int = 30,
     val reconnectSeconds: Int = 5
 )

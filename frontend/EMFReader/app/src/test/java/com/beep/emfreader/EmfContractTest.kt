@@ -2,16 +2,16 @@ package com.beep.emfreader
 
 import com.beep.emfreader.data.EmfAlertLevel
 import com.beep.emfreader.data.EmfReadings
-import com.beep.emfreader.data.EmfSppContract
+import com.beep.emfreader.data.EmfContract
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
-class EmfSppContractTest {
+class EmfContractTest {
 
     @Test
     fun parsesTheDocumentedExampleLine() {
-        val readings = requireNotNull(EmfSppContract.parseLine("WIRE,44,12,44,20"))
+        val readings = requireNotNull(EmfContract.parseLine("WIRE,44,12,44,20"))
 
         assertEquals(12, readings.fieldPercent)
         assertEquals(44, readings.opampPercent)
@@ -36,17 +36,17 @@ class EmfSppContractTest {
 
     @Test
     fun rejectsAnythingThatIsNotAReading() {
-        assertNull(EmfSppContract.parseLine("ESP32 ready. Pair with 'EMF_Wire_Detector'."))
-        assertNull(EmfSppContract.parseLine("WIRE,44,12"))
-        assertNull(EmfSppContract.parseLine("WIRE,44,12,44,20,extra"))
-        assertNull(EmfSppContract.parseLine("NOISE,44,12,44,20"))
-        assertNull(EmfSppContract.parseLine(""))
+        assertNull(EmfContract.parseLine("ESP32 ready. Pair with 'EMF_Wire_Detector'."))
+        assertNull(EmfContract.parseLine("WIRE,44,12"))
+        assertNull(EmfContract.parseLine("WIRE,44,12,44,20,extra"))
+        assertNull(EmfContract.parseLine("NOISE,44,12,44,20"))
+        assertNull(EmfContract.parseLine(""))
     }
 
     @Test
     fun parsesTheSketchDebugLine() {
         val readings = requireNotNull(
-            EmfSppContract.parseLine("hallPct=12 opampPct=44 jitterAvg=8 jitterPct=20  signal=44")
+            EmfContract.parseLine("hallPct=12 opampPct=44 jitterAvg=8 jitterPct=20  signal=44")
         )
 
         assertEquals(12, readings.fieldPercent)
@@ -59,7 +59,7 @@ class EmfSppContractTest {
     @Test
     fun parsesTheAllZeroesLineSeenFromTheBoard() {
         val readings = requireNotNull(
-            EmfSppContract.parseLine("hallPct=0 opampPct=0 jitterAvg=0 jitterPct=0  signal=0")
+            EmfContract.parseLine("hallPct=0 opampPct=0 jitterAvg=0 jitterPct=0  signal=0")
         )
 
         assertEquals(0, readings.fieldPercent)
@@ -71,7 +71,7 @@ class EmfSppContractTest {
     @Test
     fun ignoresTheRawJitterAverage() {
         val readings = requireNotNull(
-            EmfSppContract.parseLine("hallPct=5 opampPct=4 jitterAvg=612 jitterPct=9 signal=5")
+            EmfContract.parseLine("hallPct=5 opampPct=4 jitterAvg=612 jitterPct=9 signal=5")
         )
 
         assertEquals(9, readings.jitterPercent)
@@ -81,7 +81,7 @@ class EmfSppContractTest {
     @Test
     fun recomputesSignalWhenTheLineOmitsIt() {
         val readings = requireNotNull(
-            EmfSppContract.parseLine("hallPct=30 opampPct=62 jitterPct=10")
+            EmfContract.parseLine("hallPct=30 opampPct=62 jitterPct=10")
         )
 
         assertEquals(62, readings.signalPercent)
@@ -90,7 +90,7 @@ class EmfSppContractTest {
     @Test
     fun parsesTheV3DebugLine() {
         val readings = requireNotNull(
-            EmfSppContract.parseLine("p2p=41 opampPct=44 jitterAvg=8 jitterPct=20 magnet=0")
+            EmfContract.parseLine("p2p=41 opampPct=44 jitterAvg=8 jitterPct=20 magnet=0")
         )
 
         assertEquals(0, readings.fieldPercent)
@@ -103,7 +103,7 @@ class EmfSppContractTest {
     @Test
     fun v3MagnetNearMapsToFullFieldButSignalFollowsOpampOnly() {
         val readings = requireNotNull(
-            EmfSppContract.parseLine("p2p=12 opampPct=0 jitterAvg=3 jitterPct=5 magnet=1")
+            EmfContract.parseLine("p2p=12 opampPct=0 jitterAvg=3 jitterPct=5 magnet=1")
         )
 
         assertEquals(100, readings.fieldPercent)
@@ -121,7 +121,7 @@ class EmfSppContractTest {
 
     @Test
     fun parsesTheV11StatusLine() {
-        val readings = requireNotNull(EmfSppContract.parseLine("WIRE,44,0,44,20"))
+        val readings = requireNotNull(EmfContract.parseLine("WIRE,44,0,44,20"))
 
         assertEquals(0, readings.fieldPercent)
         assertEquals(44, readings.opampPercent)
@@ -133,7 +133,7 @@ class EmfSppContractTest {
     @Test
     fun parsesTheV11DebugLine() {
         val readings = requireNotNull(
-            EmfSppContract.parseLine(
+            EmfContract.parseLine(
                 "p2p=41 opampPct=44 field=12 mag=12345 xyz=100,200,300 " +
                     "fails=0 same=0 reinit=0 fieldPct=12 jitterPct=20"
             )
@@ -149,7 +149,7 @@ class EmfSppContractTest {
     @Test
     fun v11DebugLineWithCommasStillRoutesToDebugParser() {
         val readings = requireNotNull(
-            EmfSppContract.parseLine(
+            EmfContract.parseLine(
                 "p2p=12 opampPct=0 field=5 mag=9999 xyz=-1,-2,-3 " +
                     "fails=0 same=0 reinit=0 fieldPct=5 jitterPct=5"
             )
@@ -163,7 +163,7 @@ class EmfSppContractTest {
     @Test
     fun v11RawFieldCountsAreNotPercentages() {
         assertNull(
-            EmfSppContract.parseLine(
+            EmfContract.parseLine(
                 "p2p=41 opampPct=44 field=12 mag=12345 xyz=1,2,3 " +
                     "fails=0 same=0 reinit=0 jitterPct=20"
             )
@@ -173,7 +173,7 @@ class EmfSppContractTest {
     @Test
     fun v11FieldPctWinsOverLegacyHallPct() {
         val readings = requireNotNull(
-            EmfSppContract.parseLine("hallPct=9 fieldPct=31 opampPct=10 jitterPct=4 signal=31")
+            EmfContract.parseLine("hallPct=9 fieldPct=31 opampPct=10 jitterPct=4 signal=31")
         )
 
         assertEquals(31, readings.fieldPercent)
@@ -181,17 +181,17 @@ class EmfSppContractTest {
 
     @Test
     fun rejectsInvalidMagnetValues() {
-        assertNull(EmfSppContract.parseLine("p2p=41 opampPct=44 jitterPct=20 magnet=2"))
-        assertNull(EmfSppContract.parseLine("p2p=41 opampPct=44 jitterPct=20 magnet=x"))
-        assertNull(EmfSppContract.parseLine("p2p=41 opampPct=44 jitterPct=20"))
+        assertNull(EmfContract.parseLine("p2p=41 opampPct=44 jitterPct=20 magnet=2"))
+        assertNull(EmfContract.parseLine("p2p=41 opampPct=44 jitterPct=20 magnet=x"))
+        assertNull(EmfContract.parseLine("p2p=41 opampPct=44 jitterPct=20"))
     }
 
     @Test
     fun rejectsTheRawAdcTraceAndPartialDebugLines() {
-        assertNull(EmfSppContract.parseLine("RAW hallPin=1005"))
-        assertNull(EmfSppContract.parseLine("RAW opampRaw=1023"))
-        assertNull(EmfSppContract.parseLine("hallPct=12 opampPct=44"))
-        assertNull(EmfSppContract.parseLine("hallPct=aa opampPct=44 jitterPct=20 signal=44"))
+        assertNull(EmfContract.parseLine("RAW hallPin=1005"))
+        assertNull(EmfContract.parseLine("RAW opampRaw=1023"))
+        assertNull(EmfContract.parseLine("hallPct=12 opampPct=44"))
+        assertNull(EmfContract.parseLine("hallPct=aa opampPct=44 jitterPct=20 signal=44"))
     }
 
     @Test
@@ -205,10 +205,10 @@ class EmfSppContractTest {
 
     @Test
     fun rejectsNonNumericOrOutOfRangeFields() {
-        assertNull(EmfSppContract.parseLine("WIRE,aa,12,44,20"))
-        assertNull(EmfSppContract.parseLine("WIRE,,12,44,20"))
-        assertNull(EmfSppContract.parseLine("WIRE,44,101,44,20"))
-        assertNull(EmfSppContract.parseLine("WIRE,-1,12,44,20"))
+        assertNull(EmfContract.parseLine("WIRE,aa,12,44,20"))
+        assertNull(EmfContract.parseLine("WIRE,,12,44,20"))
+        assertNull(EmfContract.parseLine("WIRE,44,101,44,20"))
+        assertNull(EmfContract.parseLine("WIRE,-1,12,44,20"))
     }
 
     @Test
@@ -237,5 +237,5 @@ class EmfSppContractTest {
         assertEquals(62, readings.signalPercent)
     }
 
-    private fun parse(line: String): EmfReadings = requireNotNull(EmfSppContract.parseLine(line))
+    private fun parse(line: String): EmfReadings = requireNotNull(EmfContract.parseLine(line))
 }

@@ -84,9 +84,13 @@ private fun EmfAppRoot(resumeTick: Int) {
     }
 
     val canRequestAgain = remember(resumeTick) {
+        val rationalePermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            Manifest.permission.BLUETOOTH_CONNECT
+        } else {
+            Manifest.permission.ACCESS_FINE_LOCATION
+        }
         activity != null &&
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-            activity.shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH_CONNECT)
+            activity.shouldShowRequestPermissionRationale(rationalePermission)
     }
 
     val deviceSaver = remember {

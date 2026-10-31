@@ -37,11 +37,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import android.bluetooth.BluetoothAdapter
 import com.beep.emfreader.R
+import com.beep.emfreader.data.BleDeviceScanner
 import com.beep.emfreader.data.EmfDevice
-import com.beep.emfreader.data.EmfSppContract
-import com.beep.emfreader.data.PairedDeviceLoader
+import com.beep.emfreader.data.EmfContract
 import com.beep.emfreader.ui.theme.EMFReaderTheme
 import com.beep.emfreader.ui.theme.EmfBackground
 import com.beep.emfreader.ui.theme.EmfText
@@ -181,6 +180,16 @@ private fun ScanFoundBlock(
 
         Spacer(Modifier.height(ScanFoundListGap))
 
+        Text(
+            text = stringResource(R.string.scan_pairing_hint),
+            style = MaterialTheme.typography.labelMedium,
+            color = EmfTextMuted,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(ScanFoundListGap))
+
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(ScanDeviceRowGap)
@@ -205,9 +214,16 @@ private fun ScanNotFoundBlock() {
         )
         ScanGap()
         Text(
-            text = stringResource(R.string.scan_notfound_body, EmfSppContract.RELAY_NAME),
+            text = stringResource(R.string.scan_notfound_body, EmfContract.RELAY_NAME),
             style = MaterialTheme.typography.bodyMedium,
             color = EmfTextMuted,
+            textAlign = TextAlign.Center
+        )
+        ScanGap()
+        Text(
+            text = stringResource(R.string.scan_pairing_hint),
+            style = MaterialTheme.typography.labelMedium,
+            color = EmfTextHint,
             textAlign = TextAlign.Center
         )
     }
@@ -232,11 +248,11 @@ private fun ScanGap() {
 fun EmfScanHost(
     onDeviceSelected: (EmfDevice) -> Unit,
     modifier: Modifier = Modifier,
-    loader: (() -> List<EmfDevice>)? = null
+    loader: (suspend () -> List<EmfDevice>)? = null
 ) {
     val context = LocalContext.current
-    val defaultLoader = remember(context) {
-        { PairedDeviceLoader.load(BluetoothAdapter.getDefaultAdapter()) }
+    val defaultLoader: suspend () -> List<EmfDevice> = remember(context) {
+        { BleDeviceScanner(context).discover() }
     }
     var attempt by remember { mutableStateOf(0) }
     var state by remember { mutableStateOf<ScanUiState>(ScanUiState.Loading) }
@@ -270,7 +286,7 @@ private fun EmfScanFoundPreview() {
         EmfScanScreen(
             state = ScanUiState.Found(
                 listOf(
-                    EmfDevice(EmfSppContract.RELAY_NAME, "20:50:0D:2A:61:B2"),
+                    EmfDevice(EmfContract.RELAY_NAME, "20:50:0D:2A:61:B2"),
                     EmfDevice("Workshop Relay", "24:6F:28:11:22:33")
                 )
             ),

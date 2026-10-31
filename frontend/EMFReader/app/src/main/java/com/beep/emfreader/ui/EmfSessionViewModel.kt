@@ -7,14 +7,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.beep.emfreader.EmfVibration
+import com.beep.emfreader.data.BleDeviceSession
 import com.beep.emfreader.data.ConnectFailure
 import com.beep.emfreader.data.DefaultSessionTiming
+import com.beep.emfreader.data.DeviceSession
 import com.beep.emfreader.data.EmfAlertLevel
 import com.beep.emfreader.data.EmfDevice
 import com.beep.emfreader.data.EmfReadings
 import com.beep.emfreader.data.ReadingHistory
 import com.beep.emfreader.data.SessionEvent
-import com.beep.emfreader.data.SppDeviceSession
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -33,7 +34,7 @@ data class SessionUiState(
 class EmfSessionViewModel(application: Application) : AndroidViewModel(application) {
 
     private val history = ReadingHistory()
-    private var session: SppDeviceSession? = null
+    private var session: DeviceSession? = null
     private var collectJob: Job? = null
 
     var uiState by mutableStateOf(SessionUiState())
@@ -42,7 +43,7 @@ class EmfSessionViewModel(application: Application) : AndroidViewModel(applicati
     fun start(device: EmfDevice) {
         if (session != null) return
 
-        val newSession = SppDeviceSession(device = device)
+        val newSession = BleDeviceSession(context = getApplication(), device = device)
         session = newSession
         history.clear()
         uiState = SessionUiState()

@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.beep.emfreader.R
 import com.beep.emfreader.data.EmfDevice
-import com.beep.emfreader.data.EmfSppContract
+import com.beep.emfreader.data.EmfContract
 import com.beep.emfreader.ui.theme.EMFReaderTheme
 import com.beep.emfreader.ui.theme.EmfBackground
 import com.beep.emfreader.ui.theme.EmfText
@@ -64,7 +64,7 @@ fun EmfDeviceRow(
 private fun EmfDeviceRowPreview() {
     EMFReaderTheme {
         EmfDeviceRow(
-            device = EmfDevice(EmfSppContract.RELAY_NAME, "20:50:0D:2A:61:B2"),
+            device = EmfDevice(EmfContract.RELAY_NAME, "20:50:0D:2A:61:B2"),
             onConnect = {}
         )
     }

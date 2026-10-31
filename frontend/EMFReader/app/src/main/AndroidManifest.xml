@@ -3,17 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--
-      The sensor is reached over Bluetooth Classic SPP on an already-bonded
-      device. Reading the bond table and opening the RFCOMM socket both need
-      BLUETOOTH_CONNECT, and nothing here scans for nearby devices, so
-      BLUETOOTH_SCAN and the location permission are both unnecessary.
+      The sensor is reached over Bluetooth LE (Nordic UART Service, GATT).
+      BLUETOOTH_CONNECT covers connecting/bonding, BLUETOOTH_SCAN covers
+      discovering the relay's advertisement. On Android 6–11 (API <= 30)
+      BLE scanning rides on the location permission instead.
     -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
 
-    <!-- Below Android 12 Bluetooth carries no runtime permission model. -->
+    <!-- Below Android 12 Bluetooth carries no runtime permission model;
+         BLE scan results need ACCESS_FINE_LOCATION up to API 30. -->
     <uses-permission android:name="android.permission.BLUETOOTH"
         android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
         android:maxSdkVersion="30" />
 
     <uses-permission android:name="android.permission.VIBRATE" />

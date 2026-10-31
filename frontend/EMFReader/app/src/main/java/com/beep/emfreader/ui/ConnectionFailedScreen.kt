@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.beep.emfreader.R
 import com.beep.emfreader.data.ConnectFailure
 import com.beep.emfreader.data.EmfDevice
-import com.beep.emfreader.data.EmfSppContract
+import com.beep.emfreader.data.EmfContract
 import com.beep.emfreader.ui.theme.EMFReaderTheme
 
 val ConnectionFailedIconSize = 32.dp
@@ -24,6 +24,7 @@ private val ConnectFailure.bodyRes: Int
         ConnectFailure.OUT_OF_RANGE -> R.string.connect_reason_out_of_range
         ConnectFailure.DISAPPEARED -> R.string.connect_reason_disappeared
         ConnectFailure.SILENT -> R.string.connect_reason_silent
+        ConnectFailure.PAIRING_FAILED -> R.string.connect_reason_pairing_failed
     }
 
 @Composable
@@ -57,7 +58,7 @@ fun ConnectionFailedScreen(
 }
 
 private val previewDevice = EmfDevice(
-    name = EmfSppContract.RELAY_NAME,
+    name = EmfContract.RELAY_NAME,
     address = "20:50:0D:2A:61:B2"
 )
 

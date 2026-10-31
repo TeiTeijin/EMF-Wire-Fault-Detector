@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.sp
 import com.beep.emfreader.R
 import com.beep.emfreader.data.EmfAlertLevel
 import com.beep.emfreader.data.EmfDevice
-import com.beep.emfreader.data.EmfSppContract
+import com.beep.emfreader.data.EmfContract
 import com.beep.emfreader.data.EmfReadings
 import com.beep.emfreader.ui.theme.EMFReaderTheme
 import com.beep.emfreader.ui.theme.EmfBackground
@@ -376,7 +376,7 @@ private fun LiveTrace(values: List<Int>, peak: Int, windowSeconds: Int) {
 private fun EmfLiveScreenPreview() {
     EMFReaderTheme {
         EmfLiveScreen(
-            device = EmfDevice(EmfSppContract.RELAY_NAME, "20:50:0D:2A:61:B2"),
+            device = EmfDevice(EmfContract.RELAY_NAME, "20:50:0D:2A:61:B2"),
             readings = EmfReadings(fieldPercent = 18, opampPercent = 27, jitterPercent = 34),
             traceValues = listOf(18, 20, 24, 22, 30, 31, 28, 27),
             peak = 31,
@@ -390,7 +390,7 @@ private fun EmfLiveScreenPreview() {
 private fun EmfLiveScreenFaultPreview() {
     EMFReaderTheme {
         EmfLiveScreen(
-            device = EmfDevice(EmfSppContract.RELAY_NAME, "20:50:0D:2A:61:B2"),
+            device = EmfDevice(EmfContract.RELAY_NAME, "20:50:0D:2A:61:B2"),
             readings = EmfReadings(fieldPercent = 62, opampPercent = 88, jitterPercent = 71),
             traceValues = listOf(20, 24, 33, 48, 71, 88, 74, 51, 38, 29, 34, 62, 88, 71, 55, 44),
             peak = 88,

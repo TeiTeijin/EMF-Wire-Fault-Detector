@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.beep.emfreader.R
 import com.beep.emfreader.data.EmfDevice
-import com.beep.emfreader.data.EmfSppContract
+import com.beep.emfreader.data.EmfContract
 import com.beep.emfreader.ui.theme.EMFReaderTheme
 import com.beep.emfreader.ui.theme.EmfBackground
 import com.beep.emfreader.ui.theme.EmfTextMuted
@@ -146,6 +146,6 @@ private fun EmfConnectingScreen(
 @Composable
 private fun EmfConnectingScreenPreview() {
     EMFReaderTheme {
-        EmfConnectingScreen(deviceName = EmfSppContract.RELAY_NAME)
+        EmfConnectingScreen(deviceName = EmfContract.RELAY_NAME)
     }
 }

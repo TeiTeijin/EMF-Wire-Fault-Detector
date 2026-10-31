@@ -6,7 +6,12 @@ enum class ConnectFailure {
     OUT_OF_RANGE,
     DISAPPEARED,
 
-    SILENT
+    SILENT,
+
+    // The phone's pairing dialog was cancelled or the typed code was
+    // wrong (BLE static-passkey pairing). The device is still reachable:
+    // open a fresh pairing window on the detector and retry.
+    PAIRING_FAILED
 }
 
 sealed interface ConnectResult {

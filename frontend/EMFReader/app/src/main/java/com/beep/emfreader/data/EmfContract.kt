@@ -2,9 +2,16 @@ package com.beep.emfreader.data
 
 import java.util.UUID
 
-object EmfSppContract {
+object EmfContract {
 
-    val SPP_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+    // BLE transport (Nordic UART Service). The former Bluetooth Classic
+    // SPP transport was removed with ADR-0009.
+    val NUS_SERVICE_UUID: UUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
+    val NUS_RX_UUID: UUID = UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
+    val NUS_TX_UUID: UUID = UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E")
+
+    // Client Characteristic Configuration descriptor (notification toggle).
+    val CCCD_UUID: UUID = UUID.fromString("00002902-0000-1000-8000-00805F9B34FB")
 
     const val RELAY_NAME = "EMF_Wire_Detector"
 
