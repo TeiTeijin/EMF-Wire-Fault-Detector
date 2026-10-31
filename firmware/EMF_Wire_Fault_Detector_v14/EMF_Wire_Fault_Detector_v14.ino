@@ -93,8 +93,7 @@
 #include "autocal.h"
 #include "verdict.h"
 #include "paircode.h"
-#include "buttonpoll.h"
-#include "presshold.h"
+#include "edgebutton.h"
 
 // Link to ESP32: Arduino D3 (TX, through voltage divider) -> ESP32 RX
 //                Arduino D2 (RX) <- ESP32 TX (direct, no divider needed)
@@ -252,12 +251,19 @@ const int WIRE_BEEP_GAP = 800;  // ms between pulses
 const int FAULT_BEEP_GAP = 150; // ms, fast urgent beep for possible fault
 
 // ---------- BUTTON ----------
-// High-rate sampler + 50 ms debounce + press/hold classifier. It is fed
-// inside the 40 ms measurement window as well as in loop(), so a short
-// tap can never fall between samples. Quick press = SHORT_PRESS
-// (recalibrate), hold reaching 2 s = LONG_HOLD (pairing window).
-// Pure logic lives in buttonpoll.h (host-tested).
-ButtonPoller buttonPoller;
+// 1 kHz Timer1 interrupt + press/hold classifier. Sampling the button
+// from an interrupt means a short tap can never fall between main-loop
+// samples. Quick press = SHORT_PRESS (recalibrate), hold >= 2 s =
+// LONG_HOLD (pairing window, latched on release). Pure logic lives in
+// edgebutton.h (host-tested).
+EdgeButtonPoller buttonPoller;
+
+// Timer1 compare ISR at 1 kHz: feed the button level into the edge
+// classifier. (Pin-change interrupts would collide with SoftwareSerial,
+// which owns the PCINT2 group for pins 2/3.)
+ISR(TIMER1_COMPA_vect) {
+  buttonPoller.edge(digitalRead(buttonPin) == LOW, micros());
+}
 
 // ---------- QMC5883P helpers ----------
 void writeQmc(byte reg, byte val) {
@@ -328,8 +334,7 @@ bool loadOffsets() {
   return true;
 }
 
-// Peak-to-peak of the op-amp output over a 40 ms window. The button is
-// also sampled in here, so even a ~50 ms tap is seen pressed.
+// Peak-to-peak of the op-amp output over a 40 ms window.
 int measureP2P() {
   int lo = 1023, hi = 0;
   unsigned long start = millis();
@@ -337,7 +342,6 @@ int measureP2P() {
     int v = analogRead(opampPin);
     if (v < lo) lo = v;
     if (v > hi) hi = v;
-    buttonPoller.feedRaw(digitalRead(buttonPin) == LOW, millis());
   }
   return hi - lo;
 }
@@ -348,6 +352,18 @@ void setup() {
   pinMode(buzzerPin, OUTPUT);
   pinMode(buttonPin, INPUT_PULLUP);
   buzzerWrite(false); // start silent
+
+  // 1 kHz button sampling via Timer1 compare (CTC, top = OCR1A):
+  // 16 MHz / (15999 + 1) = 1000 Hz. Timer1 is otherwise unused, and
+  // this avoids the PCINT2 group that SoftwareSerial owns for pins 2/3.
+  noInterrupts();
+  TCCR1A = 0;
+  TCCR1B = 0;
+  OCR1A  = 15999;
+  TCCR1B |= (1 << WGM12);   // CTC mode
+  TCCR1B |= (1 << CS10);    // prescaler 1
+  TIMSK1 |= (1 << OCIE1A);  // enable compare A interrupt
+  interrupts();
 
   // Probe the OLED on the I2C bus (U8g2 has no failure report of its
   // own), then bring up the display.
@@ -510,11 +526,10 @@ void loop() {
   // Pairing-code lines from the ESP32 relay (may arrive any time).
   pollPairLines();
 
-  // Button: sampled at high rate inside measureP2P(); drain any latched
-  // event here. One action per physical press: quick = recalibrate,
-  // hold 2 s = pairing window.
-  buttonPoller.feedRaw(digitalRead(buttonPin) == LOW, millis());
-  ButtonPoller::Event buttonEvent = buttonPoller.takeEvent();
+  // Button: the ISR classifies presses the instant they happen; drain
+  // any latched event here. Quick press = recalibrate, hold 2 s =
+  // pairing window (latched when the button is released after the hold).
+  EdgeButtonPoller::Event buttonEvent = buttonPoller.takeEvent();
 
   // Commands from the Serial Monitor (no button needed):
   //   c = recalibrate rest baseline
@@ -530,12 +545,12 @@ void loop() {
     runCalibrationSequence(3);
     return;
   }
-  if (buttonEvent == ButtonPoller::SHORT_PRESS || cmd == 'c' || cmd == 'C') {
+  if (buttonEvent == EdgeButtonPoller::SHORT_PRESS || cmd == 'c' || cmd == 'C') {
     Serial.println(F("Recalibrating"));
     runCalibrationSequence(3);
     return;
   }
-  if (buttonEvent == ButtonPoller::LONG_HOLD || cmd == 'p' || cmd == 'P') {
+  if (buttonEvent == EdgeButtonPoller::LONG_HOLD || cmd == 'p' || cmd == 'P') {
     Serial.println(F("Pairing window requested"));
     sendPairOn();
     // No return here: sensing keeps running while the window is open.
