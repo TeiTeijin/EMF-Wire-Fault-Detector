@@ -253,16 +253,16 @@ const int FAULT_BEEP_GAP = 150; // ms, fast urgent beep for possible fault
 // ---------- BUTTON ----------
 // 1 kHz Timer1 interrupt + press/hold classifier. Sampling the button
 // from an interrupt means a short tap can never fall between main-loop
-// samples. Quick press = SHORT_PRESS (recalibrate), hold >= 2 s =
-// LONG_HOLD (pairing window, latched on release). Pure logic lives in
-// edgebutton.h (host-tested).
+// samples. Quick press = SHORT_PRESS (recalibrate), hold reaching 2 s =
+// LONG_HOLD, fired AT the 2 s mark while still held (pairing window).
+// Pure logic lives in edgebutton.h (host-tested).
 EdgeButtonPoller buttonPoller;
 
 // Timer1 compare ISR at 1 kHz: feed the button level into the edge
 // classifier. (Pin-change interrupts would collide with SoftwareSerial,
 // which owns the PCINT2 group for pins 2/3.)
 ISR(TIMER1_COMPA_vect) {
-  buttonPoller.edge(digitalRead(buttonPin) == LOW, micros());
+  buttonPoller.tick(digitalRead(buttonPin) == LOW, micros());
 }
 
 // ---------- QMC5883P helpers ----------
@@ -528,7 +528,7 @@ void loop() {
 
   // Button: the ISR classifies presses the instant they happen; drain
   // any latched event here. Quick press = recalibrate, hold 2 s =
-  // pairing window (latched when the button is released after the hold).
+  // pairing window (fires at the 2 s mark while still held).
   EdgeButtonPoller::Event buttonEvent = buttonPoller.takeEvent();
 
   // Commands from the Serial Monitor (no button needed):
