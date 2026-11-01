@@ -90,10 +90,11 @@ void closePairingWindow() {
 }
 
 // Forwards one status line to the phone over the TX characteristic and
-// mirrors it on USB. No client -> no notify.
+// mirrors it on USB. No client -> no notify. The newline is required:
+// the app's line parser only emits complete, newline-terminated lines.
 void forwardToPhone(const String& line) {
   if (deviceConnected && pTxCharacteristic != nullptr) {
-    pTxCharacteristic->setValue(line);
+    pTxCharacteristic->setValue(line + "\n");
     pTxCharacteristic->notify();
   }
 }
