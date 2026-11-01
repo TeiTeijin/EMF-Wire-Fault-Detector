@@ -35,6 +35,25 @@ android {
     buildFeatures {
         compose = true
     }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            all {
+                // Robolectric's resolver mishandles spaces in the user
+                // profile path (C:\Users\Lily Ann -> %20), so the android-all
+                // jar is pre-downloaded to a space-free directory.
+                it.systemProperty("robolectric.offline", "true")
+                it.systemProperty("robolectric.dependency.dir", "C:\\robolectric-deps")
+                // Roborazzi's Gradle plugin normally forwards this; set it
+                // directly so screenshots are actually written.
+                it.systemProperty("roborazzi.test.record", "true")
+                it.systemProperty(
+                    "screenshot.out.dir",
+                    rootProject.file("../../docs/screenshots").absolutePath
+                )
+            }
+        }
+    }
 }
 
 dependencies {
@@ -54,4 +73,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
 }

@@ -94,7 +94,7 @@ fun EmfSessionHost(
 }
 
 @Composable
-private fun EmfConnectingScreen(
+internal fun EmfConnectingScreen(
     deviceName: String,
     modifier: Modifier = Modifier
 ) {

@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Robolectric runtime jars (large, downloaded by setup)
+robolectric-deps/
