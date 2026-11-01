@@ -9,7 +9,10 @@
       BLE scanning rides on the location permission instead.
     -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="s" />
 
     <!-- Below Android 12 Bluetooth carries no runtime permission model;
          BLE scan results need ACCESS_FINE_LOCATION up to API 30. -->
