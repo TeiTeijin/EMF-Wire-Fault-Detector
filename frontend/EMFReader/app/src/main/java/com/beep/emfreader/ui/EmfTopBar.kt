@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,13 +17,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.beep.emfreader.R
 import com.beep.emfreader.ui.theme.EMFReaderTheme
+import com.beep.emfreader.ui.theme.EmfDivider
 import com.beep.emfreader.ui.theme.EmfText
-import com.beep.emfreader.ui.theme.EmfTextFaint
+import com.beep.emfreader.ui.theme.emfLabelStyle
 
-val EmfTopBarHeight = 44.dp
+val EmfTopBarHeight = 56.dp
 
-val EmfNavLineHeight = 2.dp
-val EmfNavLineColor = EmfTextFaint.copy(alpha = 0.12f)
+val EmfNavLineHeight = 1.dp
+val EmfNavLineColor = EmfDivider
 
 @Composable
 fun EmfNavDivider(modifier: Modifier = Modifier) {
@@ -39,27 +39,35 @@ fun EmfNavDivider(modifier: Modifier = Modifier) {
 @Composable
 fun EmfTopBar(
     modifier: Modifier = Modifier,
-    title: String = stringResource(R.string.app_title)
+    title: String = stringResource(R.string.app_title),
+    statusBarPadding: Boolean = true
 ) {
+    val base = if (statusBarPadding) {
+        modifier.windowInsetsPadding(WindowInsets.statusBars)
+    } else {
+        modifier
+    }
     Column(
-        modifier = modifier
+        modifier = base
             .fillMaxWidth()
-            .windowInsetsPadding(WindowInsets.statusBars)
             .height(EmfTopBarHeight),
         verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.titleLarge,
+            style = emfLabelStyle(15),
             color = EmfText
         )
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF1B1B1A)
+@Preview(showBackground = true, backgroundColor = 0xFF181818)
 @Composable
 private fun EmfTopBarPreview() {
     EMFReaderTheme {
-        EmfTopBar()
+        Column {
+            EmfTopBar()
+            EmfNavDivider()
+        }
     }
 }

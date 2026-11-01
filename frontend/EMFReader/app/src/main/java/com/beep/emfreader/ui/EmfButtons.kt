@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -16,15 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.beep.emfreader.ui.theme.EmfBackground
+import com.beep.emfreader.ui.theme.EmfBorderSubtle
 import com.beep.emfreader.ui.theme.EmfText
+import com.beep.emfreader.ui.theme.EmfTextMuted
 
 val EmfButtonMaxWidth = 342.dp
-val EmfButtonHeight = 54.dp
-val EmfButtonShape = RoundedCornerShape(8.dp)
-val EmfButtonBorderWidth = 1.dp
-val EmfCompactButtonHeight = 36.dp
-val EmfCompactButtonPaddingH = 18.dp
-val EmfCompactButtonPaddingV = 8.dp
+val EmfButtonHeight = 56.dp
+val EmfButtonShape = CircleShape
+val EmfButtonBorderWidth = 1.2.dp
+val EmfCompactButtonHeight = 44.dp
+val EmfCompactButtonPaddingH = 22.dp
+val EmfCompactButtonPaddingV = 10.dp
 
 @Composable
 fun EmfPrimaryButton(
@@ -46,7 +48,7 @@ fun EmfPrimaryButton(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.labelLarge
+            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
         )
     }
 }
@@ -72,7 +74,7 @@ fun EmfCompactButton(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold)
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
         )
     }
 }
@@ -86,7 +88,7 @@ fun EmfSecondaryButton(
     OutlinedButton(
         onClick = onClick,
         shape = EmfButtonShape,
-        border = BorderStroke(EmfButtonBorderWidth, EmfText),
+        border = BorderStroke(EmfButtonBorderWidth, EmfBorderSubtle),
         colors = ButtonDefaults.outlinedButtonColors(contentColor = EmfText),
         modifier = modifier
             .widthIn(max = EmfButtonMaxWidth)
@@ -95,7 +97,7 @@ fun EmfSecondaryButton(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold)
         )
     }
 }

@@ -158,13 +158,13 @@ private fun ScanFoundBlock(
     ) {
         Text(
             text = stringResource(R.string.scan_found_title),
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.headlineLarge,
             color = EmfText,
             textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(Modifier.height(ScanFoundCountGap))
+        Spacer(Modifier.height(ScanFoundCountGap + 2.dp))
 
         Text(
             text = pluralStringResource(
@@ -172,27 +172,27 @@ private fun ScanFoundBlock(
                 devices.size,
                 devices.size
             ),
-            style = MaterialTheme.typography.labelMedium,
-            color = EmfTextHint,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(Modifier.height(ScanFoundListGap))
-
-        Text(
-            text = stringResource(R.string.scan_pairing_hint),
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.bodyMedium,
             color = EmfTextMuted,
             textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(Modifier.height(ScanFoundListGap))
+        Spacer(Modifier.height(ScanFoundListGap + 4.dp))
+
+        Text(
+            text = stringResource(R.string.scan_pairing_hint),
+            style = MaterialTheme.typography.bodyMedium,
+            color = EmfTextHint,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(ScanFoundListGap + 8.dp))
 
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(ScanDeviceRowGap)
+            verticalArrangement = Arrangement.spacedBy(ScanDeviceRowGap + 4.dp)
         ) {
             devices.forEach { device ->
                 EmfDeviceRow(device = device, onConnect = { onDeviceSelected(device) })

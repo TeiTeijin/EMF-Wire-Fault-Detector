@@ -22,20 +22,31 @@ val RobotoMonoFamily = FontFamily(
 private fun inter(
     weight: FontWeight,
     size: Int,
-    lineHeight: Int
+    lineHeight: Int,
+    letterSpacing: Int = 0
 ) = TextStyle(
     fontFamily = InterFamily,
     fontWeight = weight,
     fontSize = size.sp,
     lineHeight = lineHeight.sp,
-    letterSpacing = 0.sp
+    letterSpacing = letterSpacing.sp
 )
 
 val EmfTypography = Typography(
-    titleLarge = inter(FontWeight.SemiBold, 20, 24),
-    headlineSmall = inter(FontWeight.Normal, 24, 30),
+    headlineLarge = inter(FontWeight.Bold, 30, 36),
+    headlineSmall = inter(FontWeight.Bold, 24, 30),
+    titleLarge = inter(FontWeight.SemiBold, 22, 28),
+    titleMedium = inter(FontWeight.SemiBold, 18, 24),
     bodyMedium = inter(FontWeight.Normal, 16, 24),
     bodySmall = inter(FontWeight.Normal, 14, 20),
     labelMedium = inter(FontWeight.Normal, 13, 16),
-    labelLarge = inter(FontWeight.Bold, 16, 20)
+    labelLarge = inter(FontWeight.SemiBold, 16, 20)
+)
+
+// Uppercase section labels: FIELD / OP-AMP / JITTER / PEAK / LAST 15 S.
+fun emfLabelStyle(size: Int = 12) = inter(
+    FontWeight.SemiBold,
+    size,
+    size + 4,
+    letterSpacing = 2
 )
