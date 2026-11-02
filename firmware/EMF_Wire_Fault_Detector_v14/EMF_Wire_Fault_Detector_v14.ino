@@ -92,6 +92,7 @@
 #include <SoftwareSerial.h>
 #include <EEPROM.h>
 #include "autocal.h"
+#include "classify.h"
 #include "verdict.h"
 #include "paircode.h"
 #include "edgebutton.h"
@@ -249,14 +250,28 @@ const int FIELD_MAX_JITTER    = 200;   // v13: 100 -> 200
 const float FOLLOW_TAU_CLEAR  = 5.0;
 const float FOLLOW_TAU_WIRE   = 60.0;
 const float FOLLOW_TAU_ACTIVE = 120.0;
+// The antenna baseline has the same problem as the magnetometer zero point:
+// body coupling / display noise can move the resting p2p level after
+// calibration. Track it slowly while Clear so the op-amp channel stays
+// sensitive instead of being pinned below a stale ceiling.
+const float FOLLOW_TAU_ANTENNA        = 10.0;
+const float FOLLOW_TAU_ANTENNA_JITTER = 20.0;
+const float FOLLOW_TAU_SETTLE         = 2.0;
+const int   OPAMP_MARGIN              = 25;   // counts above the adaptive baseline
+const int   MOTION_FIELD_JITTER       = 55;   // field-only jitter % that means "moving"
+const unsigned long MOTION_HOLD_MS    = 2500; // keep Clear this long after motion stops
+const unsigned long SETTLE_MS         = 5000; // ignore alerts while baselines settle
 unsigned long lastFollowMs = 0;
+unsigned long lastMotionMs = 0;
+unsigned long settleUntilMs = 0;
+float opampBaseF = 0;
+float opampJitterBaseF = 0;
 
 // ---------- THRESHOLDS (0-100% scale) ----------
 const int LOW_THRESHOLD    = 15;  // below this: nothing detected
 const int FAULT_THRESHOLD  = 50;  // jitter % at/above this: possible fault
 
 // ---------- STATE ----------
-enum AlertLevel { ALERT_CLEAR, ALERT_WIRE, ALERT_FAULT };
 AlertLevel currentAlert = ALERT_CLEAR;
 
 unsigned long lastBeepTime = 0;
@@ -471,6 +486,14 @@ void runCalibrationSequence(int countdownSeconds) {
   fieldJitterTotal = (long)calFieldJitter * SMOOTH_SAMPLES;
   smoothIndex      = 0;
 
+  // The antenna path's resting level is taken from the mean, not the
+  // calibration maximum, and is allowed to settle onto the real operating
+  // level for a few seconds before it can raise an alert.
+  opampBaseF       = baselineOpamp;
+  opampJitterBaseF = calP2pJitter;
+  lastMotionMs     = 0;
+  settleUntilMs    = millis() + SETTLE_MS;
+
   currentAlert = ALERT_CLEAR;
   debounce.resetTo((int)ALERT_CLEAR);
 
@@ -582,13 +605,17 @@ void loop() {
   }
 
   // --- Antenna / op-amp path ---
+  unsigned long nowMs = millis();
   int p2p = measureP2P();
   int opampAvg    = smoothAverage(p2p, opampReadings, &opampTotal);
-  int opampSignal = max(0, opampAvg - calP2pCeil);        // only a rise beyond the calibration wobble
+  // Only a rise above the *tracked* resting level counts as signal. The
+  // calibration maximum is deliberately not used here: it sits above the
+  // normal operating level, which pinned this channel at 0% permanently.
+  int opampSignal = max(0, opampAvg - (int)opampBaseF - OPAMP_MARGIN);
   int p2pJump     = abs(p2p - prevP2P);
   prevP2P = p2p;
   int opampJitterAvg    = smoothAverage(p2pJump, jitterReadings, &jitterTotal);
-  int opampJitterExcess = max(0, opampJitterAvg - calP2pJitter);  // only extra jumpiness
+  int opampJitterExcess = max(0, opampJitterAvg - (int)opampJitterBaseF);
 
   // --- Magnetometer path ---
   int fieldDelta = 0;        // stays 0 while the chip is not giving fresh data
@@ -670,6 +697,19 @@ void loop() {
   int signal        = max(opampPercent, fieldPercent);
   int jitterPercent = max(opampJitterPercent, fieldJitterPercent);
 
+  // Movement gate. A magnetometer cannot tell "the device moved" from "a
+  // field appeared"; both change the vector. While the field is large *and*
+  // jumpy, and the antenna is quiet, treat it as handling: hold Clear and
+  // let the zero-point follower catch up. A real steady wire has low field
+  // jitter and is still reported; an arcing/faulty wire lights the antenna,
+  // so it is not mistaken for movement.
+  bool settling = (long)(settleUntilMs - nowMs) > 0;
+  bool motion = (fieldPercent >= LOW_THRESHOLD &&
+                 fieldJitterPercent >= MOTION_FIELD_JITTER &&
+                 opampPercent < LOW_THRESHOLD);
+  if (motion) lastMotionMs = nowMs;
+  bool motionRecent = lastMotionMs != 0 && (nowMs - lastMotionMs < MOTION_HOLD_MS);
+
   // --- DEBUG: watch these while testing, comment out once tuned ---
   static byte dbgTick = 0;
   if (++dbgTick >= 4) {
@@ -685,32 +725,58 @@ void loop() {
   Serial.print(F(" reinit=")); Serial.print(qmcReinits);
   Serial.print(F(" fieldPct=")); Serial.print(fieldPercent);
   Serial.print(F(" jitterPct=")); Serial.print(jitterPercent);
+  // Split-path diagnostics: which path owns the signal/jitter, and what
+  // calibration learned. Temporary while tuning the front end.
+  Serial.print(F(" fj=")); Serial.print(fieldJitterPercent);
+  Serial.print(F(" oj=")); Serial.print(opampJitterPercent);
+  Serial.print(F(" fja=")); Serial.print(fieldJitterAvg);
+  Serial.print(F(" oja=")); Serial.print(opampJitterAvg);
+  Serial.print(F(" pj=")); Serial.print(p2pJump);
+  Serial.print(F(" fjump=")); Serial.print(fieldJump);
+  Serial.print(F(" os=")); Serial.print(opampSignal);
+  Serial.print(F(" fs=")); Serial.print(fieldSignal);
+  Serial.print(F(" cpc=")); Serial.print(calP2pCeil);
+  Serial.print(F(" cpj=")); Serial.print(calP2pJitter);
+  Serial.print(F(" cfb=")); Serial.print(calFieldBand);
+  Serial.print(F(" cfj=")); Serial.print(calFieldJitter);
+  Serial.print(F(" bm=")); Serial.print((int)baseMagF);
+  Serial.print(F(" ob=")); Serial.print((int)opampBaseF);
+  Serial.print(F(" ojb=")); Serial.print((int)opampJitterBaseF);
+  Serial.print(F(" mo=")); Serial.print(motionRecent ? 1 : 0);
+  Serial.print(F(" st=")); Serial.print(settling ? 1 : 0);
   Serial.print(F(" cal=")); Serial.println(autocal.ready() ? 1 : 0);
   }
 
-  // Classify (raw), then let the debounce decide what to act on.
-  AlertLevel rawAlert;
-  if (signal < LOW_THRESHOLD) {
-    rawAlert = ALERT_CLEAR;
-  } else if (jitterPercent >= FAULT_THRESHOLD) {
-    rawAlert = ALERT_FAULT;
-  } else {
-    rawAlert = ALERT_WIRE;
-  }
+  // Classify (raw), then let the debounce decide what to act on. During
+  // motion (and for a short settle after it stops) the verdict is held
+  // Clear: the change is the device moving, not a wire.
+  AlertLevel rawAlert = classifyVerdict(signal, jitterPercent,
+                                        motionRecent || settling,
+                                        LOW_THRESHOLD, FAULT_THRESHOLD);
   currentAlert = (AlertLevel)debounce.update((int)rawAlert);
 
-  // Handheld: the zero point follows the device. Fast while Clear, slower
-  // during Wire, very slow during Fault.
-  unsigned long nowMs = millis();
+  // Handheld: the zero point follows the device. Fast while Clear or
+  // settling, slower during Wire, very slow during Fault. The same logic
+  // applies to the antenna's resting level and jitter floor.
   float dt = (nowMs - lastFollowMs) / 1000.0;
   lastFollowMs = nowMs;
   if (dt > 1.0) dt = 1.0;
-  if (qmcOk && !qmcFault) {
-    float tau;
-    if (currentAlert == ALERT_CLEAR)      tau = FOLLOW_TAU_CLEAR;
-    else if (currentAlert == ALERT_WIRE)  tau = FOLLOW_TAU_WIRE;
-    else                                  tau = FOLLOW_TAU_ACTIVE;
-    baseMagF += ((float)mag - baseMagF) * (dt / tau);
+  if (settling || motionRecent) {
+    baseMagF += ((float)mag - baseMagF) * (dt / FOLLOW_TAU_SETTLE);
+    opampBaseF += (opampAvg - opampBaseF) * (dt / FOLLOW_TAU_SETTLE);
+    opampJitterBaseF += (opampJitterAvg - opampJitterBaseF) * (dt / FOLLOW_TAU_SETTLE);
+  } else {
+    if (qmcOk && !qmcFault) {
+      float tau;
+      if (currentAlert == ALERT_CLEAR)      tau = FOLLOW_TAU_CLEAR;
+      else if (currentAlert == ALERT_WIRE)  tau = FOLLOW_TAU_WIRE;
+      else                                  tau = FOLLOW_TAU_ACTIVE;
+      baseMagF += ((float)mag - baseMagF) * (dt / tau);
+    }
+    if (currentAlert == ALERT_CLEAR) {
+      opampBaseF += (opampAvg - opampBaseF) * (dt / FOLLOW_TAU_ANTENNA);
+      opampJitterBaseF += (opampJitterAvg - opampJitterBaseF) * (dt / FOLLOW_TAU_ANTENNA_JITTER);
+    }
   }
 
   driveBuzzer();
