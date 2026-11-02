@@ -131,6 +131,8 @@ void drawCentered(const uint8_t* font, u8g2_uint_t y, const char* s) {
 #define QMC_ADDR 0x2C
 bool qmcOk = false;
 bool qmcFault = false;     // true while the chip is not giving fresh readings
+unsigned long lastGoodQmcMs = 0;  // last time the chip gave a fresh reading
+int lastGoodFieldPct = 0;         // last field % from a fresh reading
 int qmcFailCount = 0;      // consecutive failed reads
 int qmcSameCount = 0;      // consecutive identical readings (a frozen chip)
 int qmcReinits = 0;        // how many times the chip had to be restarted
@@ -307,7 +309,8 @@ void writeQmc(byte reg, byte val) {
 bool qmcInit() {
   Wire.beginTransmission(QMC_ADDR);
   if (Wire.endTransmission() != 0) return false;   // nothing answered at 0x2C
-  writeQmc(0x0B, 0x08);   // control 2: +/-8 G range, SET/RESET on
+  writeQmc(0x0B, 0x08);   // control 2: +/-8 G range, SET/RESET on (0x08 is what
+                           // this chip needs; 0x01 makes it hang continuously)
   writeQmc(0x0A, 0xCF);   // control 1: continuous mode, 200 Hz, 8x oversampling
   // Read the chip ID (should be 0x80) so the Serial Monitor shows it is talking
   Wire.beginTransmission(QMC_ADDR);
@@ -638,7 +641,9 @@ void loop() {
 
       // Auto hard-iron learning: feed fresh raw readings to the tracker.
       // (The tracker also ignores exact repeat triplets on its own.)
-      if (qmcSameCount == 0) {
+      // A stalled chip briefly returns 0,0,0 before the restart logic
+      // kicks in - never let that corrupt the learned min/max range.
+      if (qmcSameCount == 0 && !(x == 0 && y == 0 && z == 0)) {
         bool wasReady = autocal.ready();
         if (autocal.update(x, y, z, millis())) {
           saveOffsets();
@@ -675,7 +680,9 @@ void loop() {
     if (qmcFault) { fieldDelta = 0; fieldJump = 0; }
 
     // Chip failed or froze (for example after a power glitch): restart it.
-    if (qmcFailCount >= 3 || qmcSameCount >= 20) {
+    // 8 frozen samples is enough - a hung chip recovers faster and the
+    // display never sits on ERR for long.
+    if (qmcFailCount >= 3 || qmcSameCount >= 8) {
       qmcReinits++;
       Serial.println(F("QMC5883P stopped updating - restarting it"));
       qmcInit();
@@ -699,6 +706,18 @@ void loop() {
   // The stronger path gives the signal, the more erratic path gives the jitter.
   int signal        = max(opampPercent, fieldPercent);
   int jitterPercent = max(opampJitterPercent, fieldJitterPercent);
+
+  // Keep the last good field value on screen during a brief chip freeze;
+  // only flag ERR if the chip stays dead for a while.
+  bool fieldErr = false;
+  int fieldDisplayPct = fieldPercent;
+  if (qmcFault) {
+    fieldDisplayPct = lastGoodFieldPct;
+    if (nowMs - lastGoodQmcMs > 3000) fieldErr = true;
+  } else {
+    lastGoodFieldPct = fieldPercent;
+    lastGoodQmcMs = nowMs;
+  }
 
   // Movement gate. A magnetometer cannot tell "the device moved" from "a
   // field appeared"; both change the vector. While the field is large *and*
@@ -794,7 +813,7 @@ void loop() {
   }
 
   driveBuzzer();
-  updateDisplay(fieldPercent, opampPercent, jitterPercent);
+  updateDisplay(fieldDisplayPct, opampPercent, jitterPercent, fieldErr);
   sendStatusToEsp(signal, fieldPercent, opampPercent, jitterPercent);
 
 }
@@ -826,7 +845,7 @@ void driveBuzzer() {
   }
 }
 
-void updateDisplay(int fieldPercent, int opampPercent, int jitterPercent) {
+void updateDisplay(int fieldPercent, int opampPercent, int jitterPercent, bool fieldErr) {
   // Pairing overlay: brief "Paired!" flash, or the code to type on the
   // phone. Sensing continues underneath; the screen returns to normal
   // on its own (3 s flash / 60 s code window).
@@ -864,7 +883,7 @@ void updateDisplay(int fieldPercent, int opampPercent, int jitterPercent) {
 
     if (!qmcOk) {
       u8g2.drawStr(0, 20, "Field:  n/a");
-    } else if (qmcFault) {
+    } else if (fieldErr) {
       u8g2.drawStr(0, 20, "Field:  ERR");
     } else {
       snprintf_P(oledLine, sizeof(oledLine), PSTR("Field:  %d%%"), fieldPercent);
