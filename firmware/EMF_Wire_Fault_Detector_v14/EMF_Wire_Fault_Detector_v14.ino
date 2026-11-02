@@ -254,15 +254,17 @@ const float FOLLOW_TAU_ACTIVE = 120.0;
 // body coupling / display noise can move the resting p2p level after
 // calibration. Track it slowly while Clear so the op-amp channel stays
 // sensitive instead of being pinned below a stale ceiling.
-const float FOLLOW_TAU_ANTENNA        = 10.0;
+const float FOLLOW_TAU_ANTENNA        = 60.0; // slow: a steady source must not be learned away
 const float FOLLOW_TAU_ANTENNA_JITTER = 20.0;
 const float FOLLOW_TAU_SETTLE         = 2.0;
 const int   OPAMP_MARGIN              = 25;   // counts above the adaptive baseline
 const int   MOTION_FIELD_JITTER       = 55;   // field-only jitter % that means "moving"
 const unsigned long MOTION_HOLD_MS    = 2500; // keep Clear this long after motion stops
+const unsigned long ANTENNA_HOLD_MS   = 5000; // don't learn the antenna baseline right after a detection
 const unsigned long SETTLE_MS         = 5000; // ignore alerts while baselines settle
 unsigned long lastFollowMs = 0;
 unsigned long lastMotionMs = 0;
+unsigned long lastAntennaActiveMs = 0;
 unsigned long settleUntilMs = 0;
 float opampBaseF = 0;
 float opampJitterBaseF = 0;
@@ -492,6 +494,7 @@ void runCalibrationSequence(int countdownSeconds) {
   opampBaseF       = baselineOpamp;
   opampJitterBaseF = calP2pJitter;
   lastMotionMs     = 0;
+  lastAntennaActiveMs = 0;
   settleUntilMs    = millis() + SETTLE_MS;
 
   currentAlert = ALERT_CLEAR;
@@ -710,6 +713,15 @@ void loop() {
   if (motion) lastMotionMs = nowMs;
   bool motionRecent = lastMotionMs != 0 && (nowMs - lastMotionMs < MOTION_HOLD_MS);
 
+  // Hold the antenna baseline for a few seconds after any detection. An
+  // intermittent contact with a live cord would otherwise fall below the
+  // alert threshold, get learned as the new resting level, and make the
+  // next touch look like nothing changed.
+  bool antennaActive = (opampSignal > 0) || (currentAlert != ALERT_CLEAR);
+  if (antennaActive) lastAntennaActiveMs = nowMs;
+  bool antennaHold = lastAntennaActiveMs != 0 &&
+                     (nowMs - lastAntennaActiveMs < ANTENNA_HOLD_MS);
+
   // --- DEBUG: watch these while testing, comment out once tuned ---
   static byte dbgTick = 0;
   if (++dbgTick >= 4) {
@@ -742,6 +754,7 @@ void loop() {
   Serial.print(F(" bm=")); Serial.print((int)baseMagF);
   Serial.print(F(" ob=")); Serial.print((int)opampBaseF);
   Serial.print(F(" ojb=")); Serial.print((int)opampJitterBaseF);
+  Serial.print(F(" ah=")); Serial.print(antennaHold ? 1 : 0);
   Serial.print(F(" mo=")); Serial.print(motionRecent ? 1 : 0);
   Serial.print(F(" st=")); Serial.print(settling ? 1 : 0);
   Serial.print(F(" cal=")); Serial.println(autocal.ready() ? 1 : 0);
@@ -761,6 +774,7 @@ void loop() {
   float dt = (nowMs - lastFollowMs) / 1000.0;
   lastFollowMs = nowMs;
   if (dt > 1.0) dt = 1.0;
+
   if (settling || motionRecent) {
     baseMagF += ((float)mag - baseMagF) * (dt / FOLLOW_TAU_SETTLE);
     opampBaseF += (opampAvg - opampBaseF) * (dt / FOLLOW_TAU_SETTLE);
@@ -773,7 +787,7 @@ void loop() {
       else                                  tau = FOLLOW_TAU_ACTIVE;
       baseMagF += ((float)mag - baseMagF) * (dt / tau);
     }
-    if (currentAlert == ALERT_CLEAR) {
+    if (currentAlert == ALERT_CLEAR && !antennaHold) {
       opampBaseF += (opampAvg - opampBaseF) * (dt / FOLLOW_TAU_ANTENNA);
       opampJitterBaseF += (opampJitterAvg - opampJitterBaseF) * (dt / FOLLOW_TAU_ANTENNA_JITTER);
     }
