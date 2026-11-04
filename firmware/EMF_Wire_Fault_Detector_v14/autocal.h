@@ -46,6 +46,11 @@ public:
   // Feed one fresh raw reading. Returns true when the caller should
   // persist the offsets (first lock, or a refined save).
   bool update(int x, int y, int z, unsigned long nowMs) {
+    // Once the offsets are locked, STOP learning. Continuous refinement
+    // re-centers the midpoint on every new extreme and, during ordinary
+    // handling (small asymmetric sweeps), slowly cancels the ambient
+    // field until the magnitude reads ~0 and the channel goes blind.
+    if (ready_) return false;
     if (frozen_ && x == lastX_ && y == lastY_ && z == lastZ_) return false;
     lastX_ = x; lastY_ = y; lastZ_ = z;
     frozen_ = true;

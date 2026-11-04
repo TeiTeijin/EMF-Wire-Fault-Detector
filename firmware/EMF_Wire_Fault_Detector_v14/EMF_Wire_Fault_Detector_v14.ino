@@ -243,8 +243,13 @@ const int OPAMP_MAX_JITTER    = 150;   // antenna: extra jumpiness
 // Magnetometer: change in field STRENGTH (counts) that counts as 100%. A wire only adds to
 // the strength along the direction of the Earth's field, so expect a few hundred counts at most.
 // v13: 250 -> 500 so ordinary movement while walking maps to a smaller percentage.
-const int FIELD_MAX_DELTA     = 500;
-const int FIELD_MAX_JITTER    = 200;   // v13: 100 -> 200
+// v14.x: back to 250 so close-range wire taps and DC make/break register clearly.
+// v14.1: 150 for the defense demo - brief DC taps must clear the 15% threshold.
+// v14.2: 75 so a straight DC wire under the device registers regardless of
+// orientation (the field adds as a vector; sideways fields barely change the
+// magnitude at 150 counts = 100%).
+const int FIELD_MAX_DELTA     = 75;
+const int FIELD_MAX_JITTER    = 100;   // v13: 100 -> 200; restored for tap sensitivity
 
 // Handheld: how fast the field zero point follows the device (time constant, seconds).
 // v13: faster while Clear (15 -> 5 s) so moving between rooms re-zeroes quickly,
@@ -262,10 +267,14 @@ const float FOLLOW_TAU_SETTLE         = 2.0;
 const int   OPAMP_MARGIN              = 25;   // counts above the adaptive baseline
 const int   MOTION_FIELD_JITTER       = 55;   // field-only jitter % that means "moving"
 const unsigned long MOTION_HOLD_MS    = 2500; // keep Clear this long after motion stops
+const int   MOTION_STREAK            = 40;   // consecutive jittery samples before "moving"
+                                             // (~12 s of continuous movement; quick taps
+                                             // classify as Wire/Fault first)
 const unsigned long ANTENNA_HOLD_MS   = 5000; // don't learn the antenna baseline right after a detection
 const unsigned long SETTLE_MS         = 5000; // ignore alerts while baselines settle
 unsigned long lastFollowMs = 0;
 unsigned long lastMotionMs = 0;
+int motionStreak = 0;
 unsigned long lastAntennaActiveMs = 0;
 unsigned long settleUntilMs = 0;
 float opampBaseF = 0;
@@ -497,6 +506,7 @@ void runCalibrationSequence(int countdownSeconds) {
   opampBaseF       = baselineOpamp;
   opampJitterBaseF = calP2pJitter;
   lastMotionMs     = 0;
+  motionStreak     = 0;
   lastAntennaActiveMs = 0;
   settleUntilMs    = millis() + SETTLE_MS;
 
@@ -726,10 +736,19 @@ void loop() {
   // jitter and is still reported; an arcing/faulty wire lights the antenna,
   // so it is not mistaken for movement.
   bool settling = (long)(settleUntilMs - nowMs) > 0;
-  bool motion = (fieldPercent >= LOW_THRESHOLD &&
-                 fieldJitterPercent >= MOTION_FIELD_JITTER &&
-                 opampPercent < LOW_THRESHOLD);
-  if (motion) lastMotionMs = nowMs;
+  // A real continuous move keeps the field jumpy for many samples. A
+  // quick tap (wire arc, knock) is just as jumpy for one or two samples
+  // but must NOT be swallowed as motion: only engage the gate after a
+  // sustained streak.
+  bool motionNow = (fieldPercent >= LOW_THRESHOLD &&
+                    fieldJitterPercent >= MOTION_FIELD_JITTER &&
+                    opampPercent < LOW_THRESHOLD);
+  if (motionNow) {
+    if (motionStreak < MOTION_STREAK) motionStreak++;
+    if (motionStreak >= MOTION_STREAK) lastMotionMs = nowMs;
+  } else {
+    motionStreak = 0;
+  }
   bool motionRecent = lastMotionMs != 0 && (nowMs - lastMotionMs < MOTION_HOLD_MS);
 
   // Hold the antenna baseline for a few seconds after any detection. An
